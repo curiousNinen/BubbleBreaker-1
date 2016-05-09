@@ -10,8 +10,8 @@ namespace BubbleBreakerConsole.Models
     {
         // Sichtbare Attribute und Zugriffe auf Attribute der Klasse
         public int Score { get; set; } = 0;             // aktueller Gesamt Score
-        public int Zeilen { get; private set; } = 10;   // Anzahl der Zeilen der Matrix
-        public int Spalten { get; private set; } = 10;  // Anzahl der Spalten der Matrix
+        public int Zeilen { get; private set; }         // Anzahl der Zeilen der Matrix
+        public int Spalten { get; private set; }        // Anzahl der Spalten der Matrix
         public Zelle ZelleDerAdresse(int x, int y) 
             => Matrix[Math.Min(Math.Max(x,0),Zeilen-1), Math.Min(Math.Max(y, 0), Spalten - 1)];
 
@@ -23,8 +23,10 @@ namespace BubbleBreakerConsole.Models
         /// <summary>
         /// Konstruktor zum Initialisieren der Matrix
         /// </summary>
-        public GameMatrix()
+        public GameMatrix(int zeilen = 10, int spalten = 10)
         {
+            Zeilen = zeilen;
+            Spalten = spalten;
             Matrix = new Zelle[Zeilen, Spalten];
             for (int i = 0; i < Zeilen; i++)
                 for (int j = 0; j < Spalten; j++)

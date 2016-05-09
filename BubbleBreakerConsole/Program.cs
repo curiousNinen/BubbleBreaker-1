@@ -14,7 +14,18 @@ namespace BubbleBreakerConsole
             int x, y, r;
             string e;
 
-            GameMatrix spielMatrix = new GameMatrix();
+            Console.WriteLine("BubbleBreaker Console:");
+            Console.WriteLine("======================");
+
+            Console.Write("Anzahl Zeilen? ");
+            e = Console.ReadLine();
+            x = int.Parse(e);
+
+            Console.Write("Anzahl Spalten? ");
+            e = Console.ReadLine();
+            y = int.Parse(e);
+
+            GameMatrix spielMatrix = new GameMatrix(x,y);
             spielMatrix.ResetMatrix();
             Console.WriteLine(MatrixAusgeben(spielMatrix));
 
@@ -50,8 +61,16 @@ namespace BubbleBreakerConsole
         {
             string result = "";
             string crlf = Environment.NewLine;
-            string xAchse = "   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |  " + crlf;
-            string xDiv = " ---------------------------------------------" + crlf;
+            string xAchse = "    |";
+            for (int i = 0; i < matrix.Spalten; i++)
+            {
+                xAchse += string.Format(" {0,2} |", i);
+            }
+            xAchse += crlf;
+            string xDiv = " ";
+            foreach (char e in xAchse) xDiv += "-";
+            xDiv += crlf;
+
             string Zeile = "";
             string punkte = string.Format("Punktzahl: {0}", matrix.Score) + crlf + crlf;
 
@@ -61,12 +80,12 @@ namespace BubbleBreakerConsole
 
             for (int i = 0; i < matrix.Zeilen; i++) // Zeilen
             {
-                Zeile = string.Format(" {0} |", i);
+                Zeile = string.Format(" {0,2} |", i);
                 for (int j = 0; j < matrix.Spalten; j++)
                 {
-                    Zeile += string.Format(" {0} |", matrix.ZelleDerAdresse(i,j).FarbRepraesentation());
+                    Zeile += string.Format("  {0} |", matrix.ZelleDerAdresse(i,j).FarbRepraesentation());
                 }
-                Zeile += string.Format(" {0}", i);
+                Zeile += string.Format(" {0,2}", i);
                 Zeile += crlf;
                 result += Zeile;
                 result += xDiv;
