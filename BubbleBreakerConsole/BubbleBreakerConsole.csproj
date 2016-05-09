@@ -57,6 +57,8 @@
   <ItemGroup>
     <Content Include="Screenshots\bubblebreakerconsole-0.PNG" />
     <Content Include="Screenshots\bubblebreakerconsole-1.PNG" />
+    <Content Include="Screenshots\bubblebreakerconsole-anfang-best.PNG" />
+    <Content Include="Screenshots\bubblebreakerconsole-ende-best.PNG" />
     <Content Include="Screenshots\bubblebreakerconsole-ende.PNG" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
