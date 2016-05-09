@@ -17,7 +17,7 @@ namespace BubbleBreakerConsole.Models
 
         // Private nicht sichtbare schnittstelle des Objekts
         private Zelle[,] Matrix;                        // Spielmatrix
-        private int GefundeneGleichfarbigeZellen;       // Anzahl der gefundenen gleiche Nacbarn der letzten Suche
+        private int GefundeneGleichfarbigeNachbarn;       // Anzahl der gefundenen gleiche Nacbarn der letzten Suche
         private int minX, minY, maxX, maxY;             // Bounding box gefundener zellen der letzten Suche
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace BubbleBreakerConsole.Models
             if (Matrix[x, y].FarbVergleich(farbe) && Matrix[x, y].Status != ZellStatus.Ausgewaehlt)
             {
                 Matrix[x, y].Auswaehlen();
-                GefundeneGleichfarbigeZellen++;
+                GefundeneGleichfarbigeNachbarn++;
                 minX = Math.Min(minX, x);
                 maxX = Math.Max(maxX, x);
                 minY = Math.Min(minY, y);
@@ -76,6 +76,8 @@ namespace BubbleBreakerConsole.Models
 
                 if (x - 1 >= 0)
                     GleicheNachbarnFindenRekursiv(x - 1, y, farbe);
+
+                if (GefundeneGleichfarbigeNachbarn == 1) Matrix[x, y].FarbeFestlegen(farbe);
             }
         }
 
@@ -87,15 +89,15 @@ namespace BubbleBreakerConsole.Models
         public int FindeGleicheNachbarn(int x, int y)
         {
             BubbleFarbe farbe = Matrix[x, y].Farbe;
-            GefundeneGleichfarbigeZellen = 0;
+            GefundeneGleichfarbigeNachbarn = 0;
             minX = x;
             minY = y;
             maxX = x;
             maxY = y;
 
             GleicheNachbarnFindenRekursiv(x, y, farbe);
-            Score += (GefundeneGleichfarbigeZellen * (GefundeneGleichfarbigeZellen - 1));
-            return GefundeneGleichfarbigeZellen;
+            Score += (GefundeneGleichfarbigeNachbarn * (GefundeneGleichfarbigeNachbarn - 1));
+            return GefundeneGleichfarbigeNachbarn;
         }
 
         /// <summary>
