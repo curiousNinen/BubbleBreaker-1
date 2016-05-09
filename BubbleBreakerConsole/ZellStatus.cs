@@ -11,7 +11,7 @@ namespace BubbleBreakerConsole.Models
     /// </summary>
     public enum ZellStatus
     {
-        Besetzt,
+        Belegt,
         Ausgewaehlt,
         Leer
     }

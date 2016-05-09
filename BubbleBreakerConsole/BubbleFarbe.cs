@@ -12,10 +12,10 @@ namespace BubbleBreakerConsole.Models
     /// </summary>
     public enum BubbleFarbe
     {
-        Transparent,
-        Blau,
-        Gruen,
+        Leer,
         Rot,
+        Gruen,
+        Blau,
         Violett
     }
 }

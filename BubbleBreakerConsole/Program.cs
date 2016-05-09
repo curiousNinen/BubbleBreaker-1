@@ -14,7 +14,7 @@ namespace BubbleBreakerConsole
             int x, y, r;
             string e;
 
-            BubbleMatrix spielMatrix = new BubbleMatrix();
+            GameMatrix spielMatrix = new GameMatrix();
             spielMatrix.ResetMatrix();
             Console.WriteLine(spielMatrix.AusgebenMatrix());
 

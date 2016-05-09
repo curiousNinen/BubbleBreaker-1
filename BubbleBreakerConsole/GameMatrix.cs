@@ -6,41 +6,25 @@ using System.Threading.Tasks;
 
 namespace BubbleBreakerConsole.Models
 {
-    public class BubbleMatrix
+    public class GameMatrix
     {
-        /// <summary>
-        /// Matrix des spiels
-        /// </summary>
-        private Zelle[,] Matrix = new Zelle[10, 10];
-
-        /// <summary>
-        /// Nimmt die möglichen Bubbles auf
-        /// </summary>
-        private Bubble[] Bubbles = new Bubble[5];
-
-        /// <summary>
-        /// Variable für Punkezahl
-        /// </summary>
+        // Sichtbare Attribute der Klasse
         public int Score { get; set; } = 0;
+        public int Zeilen { get; } = 10;
+        public int Spalten { get; } = 10;
+
+        // Private nicht sichtbare schnittstelle des Objekts
+        private Zelle[,] Matrix;
 
         /// <summary>
-        /// Konstruktor zum Initialisieren der Matrix und der möglichen Bubble
+        /// Konstruktor zum Initialisieren der Matrix
         /// </summary>
-        public BubbleMatrix()
+        public GameMatrix()
         {
-            Bubbles[0] = new Bubble(BubbleFarbe.Blau);
-            Bubbles[1] = new Bubble(BubbleFarbe.Gruen);
-            Bubbles[2] = new Bubble(BubbleFarbe.Rot);
-            Bubbles[3] = new Bubble(BubbleFarbe.Violett);
-            Bubbles[4] = new Bubble(BubbleFarbe.Transparent);
-
-            for (int i = 0; i < 10; i++)
-            {
-                for (int j = 0; j < 10; j++)
-                {
+            Matrix = new Zelle[Zeilen, Spalten];
+            for (int i = 0; i < Zeilen; i++)
+                for (int j = 0; j < Spalten; j++)
                     Matrix[i, j] = new Zelle();
-                }
-            }
         }
 
         /// <summary>
@@ -48,16 +32,14 @@ namespace BubbleBreakerConsole.Models
         /// </summary>
         public void ResetMatrix()
         {
-            Random rnd = new Random();
-            for (int i = 0; i < 10; i++)
-            {
-                for (int j = 0; j < 10; j++)
-                {
-                    int bubbleIndex = rnd.Next(0, 4);
-                    Matrix[i, j].ZelleVergeben(Bubbles[bubbleIndex]);
-                }
-            }
             Score = 0;
+            Random rnd = new Random();
+            for (int i = 0; i < Zeilen; i++)
+                for (int j = 0; j < Spalten; j++)
+                {
+                    BubbleFarbe farbe = (BubbleFarbe)rnd.Next(1, 5);
+                    Matrix[i, j].FarbeFestlegen(farbe);
+                }
         }
 
         /// <summary>
@@ -69,7 +51,7 @@ namespace BubbleBreakerConsole.Models
             string result = "";
             string crlf = Environment.NewLine;
             string xAchse = "   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |  " + crlf;
-            string xDiv =   " ---------------------------------------------" + crlf;
+            string xDiv = " ---------------------------------------------" + crlf;
             string Zeile = "";
             string punkte = string.Format("Punktzahl: {0}", Score) + crlf + crlf;
 
@@ -82,7 +64,7 @@ namespace BubbleBreakerConsole.Models
                 Zeile = string.Format(" {0} |", i);
                 for (int j = 0; j < 10; j++)
                 {
-                    Zeile += string.Format(" {0} |", Matrix[i, j].BubbleZeichnen());
+                    Zeile += string.Format(" {0} |", Matrix[i, j].FarbRepraesentation());
                 }
                 Zeile += string.Format(" {0}", i);
                 Zeile += crlf;
@@ -103,7 +85,7 @@ namespace BubbleBreakerConsole.Models
         {
             if (Matrix[x, y].FarbVergleich(farbe) && Matrix[x, y].Status != ZellStatus.Ausgewaehlt)
             {
-                Matrix[x, y].ZelleAuswaehlen();
+                Matrix[x, y].Auswaehlen();
                 GefundeneGleichfarbigeZellen++;
                 minX = Math.Min(minX, x);
                 maxX = Math.Max(maxX, x);
@@ -135,7 +117,7 @@ namespace BubbleBreakerConsole.Models
         /// <param name="scoring">zum ausschalten des scoring auf false setzen</param>
         public int FindeGleicheNachbarn(int x, int y, bool scoring = true)
         {
-            BubbleFarbe farbe = Matrix[x, y].FarbeDesBubble;
+            BubbleFarbe farbe = Matrix[x, y].Farbe;
             GefundeneGleichfarbigeZellen = 0;
             minX = x;
             minY = y;
@@ -163,7 +145,7 @@ namespace BubbleBreakerConsole.Models
                         {
                             Matrix[i, y].VonZelleUebertragen(Matrix[i - 1, y]);
                         }
-                        Matrix[0, y].ZelleLeeren();
+                        Matrix[0, y].Löschen();
 
                         // Pruefen ob Spalte leer ist und falls ja Zellen der linken Nachbarspalte nach rechts schieben
                         if (Matrix[9, y].Status == ZellStatus.Leer)
@@ -173,7 +155,7 @@ namespace BubbleBreakerConsole.Models
                                 for (int j = 0; j < 10; j++)
                                 {
                                     if (i == 0)
-                                        Matrix[j, i].ZelleLeeren();
+                                        Matrix[j, i].Löschen();
                                     else
                                         Matrix[j, i].VonZelleUebertragen(Matrix[j, i - 1]);
                                 }
@@ -196,12 +178,12 @@ namespace BubbleBreakerConsole.Models
             {
                 for (int j = 9; j >= 0; j--)
                 {
-                    if (Matrix[i, j].Status == ZellStatus.Besetzt)
+                    if (Matrix[i, j].Status == ZellStatus.Belegt)
                     {
-                        if (j + 1 <= 9) if (Matrix[i, j].FarbVergleich(Matrix[i, j + 1].FarbeDesBubble)) return true;
-                        if (j - 1 >= 0) if (Matrix[i, j].FarbVergleich(Matrix[i, j - 1].FarbeDesBubble)) return true;
-                        if (i + 1 <= 9) if (Matrix[i, j].FarbVergleich(Matrix[i + 1, j].FarbeDesBubble)) return true;
-                        if (i - 1 >= 0) if (Matrix[i, j].FarbVergleich(Matrix[i - 1, j].FarbeDesBubble)) return true;
+                        if (j + 1 <= 9) if (Matrix[i, j].FarbVergleich(Matrix[i, j + 1].Farbe)) return true;
+                        if (j - 1 >= 0) if (Matrix[i, j].FarbVergleich(Matrix[i, j - 1].Farbe)) return true;
+                        if (i + 1 <= 9) if (Matrix[i, j].FarbVergleich(Matrix[i + 1, j].Farbe)) return true;
+                        if (i - 1 >= 0) if (Matrix[i, j].FarbVergleich(Matrix[i - 1, j].Farbe)) return true;
 
                     }
                 }
