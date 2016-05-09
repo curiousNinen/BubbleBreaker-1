@@ -68,8 +68,8 @@ namespace BubbleBreakerConsole.Models
         {
             string result = "";
             string crlf = Environment.NewLine;
-            string xAchse = " |0|1|2|3|4|5|6|7|8|9| " + crlf;
-            string xDiv = "-----------------------" + crlf;
+            string xAchse = "  | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |  " + crlf;
+            string xDiv =   "---------------------------------------------" + crlf;
             string Zeile = "";
             string punkte = string.Format("Punktzahl: {0}", Score) + crlf + crlf;
 
@@ -79,12 +79,12 @@ namespace BubbleBreakerConsole.Models
 
             for (int i = 0; i < 10; i++) // Zeilen
             {
-                Zeile = string.Format("{0}|", i);
+                Zeile = string.Format("{0} |", i);
                 for (int j = 0; j < 10; j++)
                 {
-                    Zeile += string.Format("{0}|", Matrix[i, j].BubbleZeichnen());
+                    Zeile += string.Format(" {0} |", Matrix[i, j].BubbleZeichnen());
                 }
-                Zeile += string.Format("{0}", i);
+                Zeile += string.Format(" {0}", i);
                 Zeile += crlf;
                 result += Zeile;
                 result += xDiv;
