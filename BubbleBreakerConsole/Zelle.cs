@@ -87,9 +87,13 @@ namespace BubbleBreakerConsole.Models
             Status = zelle.Status;
         }
 
+        /// <summary>
+        /// Ausgabe des Buchstaben oder eines Leerzeichen falls zelle leer (Optimierungspotential! in der zelle oder dem Bubble)
+        /// </summary>
+        /// <returns></returns>
         public string BubbleZeichnen()
         {
-            return ZellBubble.Farbcode();
+            return ZellBubble != null ? ZellBubble.Farbcode() : " ";
         }
     }
 }
