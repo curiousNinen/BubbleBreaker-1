@@ -8,13 +8,17 @@ namespace BubbleBreakerConsole.Models
 {
     public class GameMatrix
     {
-        // Sichtbare Attribute der Klasse
-        public int Score { get; set; } = 0;
-        public int Zeilen { get; } = 10;
-        public int Spalten { get; } = 10;
+        // Sichtbare Attribute und Zugriffe auf Attribute der Klasse
+        public int Score { get; set; } = 0;             // aktueller Gesamt Score
+        public int Zeilen { get; private set; } = 10;   // Anzahl der Zeilen der Matrix
+        public int Spalten { get; private set; } = 10;  // Anzahl der Spalten der Matrix
+        public Zelle ZelleDerAdresse(int x, int y) 
+            => Matrix[Math.Min(Math.Max(x,0),Zeilen-1), Math.Min(Math.Max(y, 0), Spalten - 1)];
 
         // Private nicht sichtbare schnittstelle des Objekts
-        private Zelle[,] Matrix;
+        private Zelle[,] Matrix;                        // Spielmatrix
+        private int GefundeneGleichfarbigeZellen;       // Anzahl der gefundenen gleiche Nacbarn der letzten Suche
+        private int minX, minY, maxX, maxY;             // Bounding box gefundener zellen der letzten Suche
 
         /// <summary>
         /// Konstruktor zum Initialisieren der Matrix
@@ -43,39 +47,6 @@ namespace BubbleBreakerConsole.Models
         }
 
         /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public string AusgebenMatrix()
-        {
-            string result = "";
-            string crlf = Environment.NewLine;
-            string xAchse = "   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |  " + crlf;
-            string xDiv = " ---------------------------------------------" + crlf;
-            string Zeile = "";
-            string punkte = string.Format("Punktzahl: {0}", Score) + crlf + crlf;
-
-            result += punkte;
-            result += xAchse;
-            result += xDiv;
-
-            for (int i = 0; i < 10; i++) // Zeilen
-            {
-                Zeile = string.Format(" {0} |", i);
-                for (int j = 0; j < 10; j++)
-                {
-                    Zeile += string.Format(" {0} |", Matrix[i, j].FarbRepraesentation());
-                }
-                Zeile += string.Format(" {0}", i);
-                Zeile += crlf;
-                result += Zeile;
-                result += xDiv;
-            }
-            result += xAchse;
-            return result;
-        }
-
-        /// <summary>
         /// Rekursiver Suchmechanismus
         /// </summary>
         /// <param name="x"></param>
@@ -92,30 +63,26 @@ namespace BubbleBreakerConsole.Models
                 minY = Math.Min(minY, y);
                 maxY = Math.Max(maxY, y);
 
-                if (y + 1 <= 9) GleicheNachbarnFindenRekursiv(x, y + 1, farbe);
-                if (y - 1 >= 0) GleicheNachbarnFindenRekursiv(x, y - 1, farbe);
-                if (x + 1 <= 9) GleicheNachbarnFindenRekursiv(x + 1, y, farbe);
-                if (x - 1 >= 0) GleicheNachbarnFindenRekursiv(x - 1, y, farbe);
+                if (y + 1 < Spalten)
+                    GleicheNachbarnFindenRekursiv(x, y + 1, farbe);
+
+                if (y - 1 >= 0)
+                    GleicheNachbarnFindenRekursiv(x, y - 1, farbe);
+
+                if (x + 1 < Zeilen)
+                    GleicheNachbarnFindenRekursiv(x + 1, y, farbe);
+
+                if (x - 1 >= 0)
+                    GleicheNachbarnFindenRekursiv(x - 1, y, farbe);
             }
         }
-
-        /// <summary>
-        /// Zähler der gefundenen gleichartigen Zellen
-        /// </summary>
-        private int GefundeneGleichfarbigeZellen;
-
-        /// <summary>
-        /// Bounding Box gleichartiger Zellen
-        /// </summary>
-        private int minX, minY, maxX, maxY;
 
         /// <summary>
         /// Starten des Suchmechanismus und initialisieren des Zugscores
         /// </summary>
         /// <param name="x"></param>
         /// <param name="y"></param>
-        /// <param name="scoring">zum ausschalten des scoring auf false setzen</param>
-        public int FindeGleicheNachbarn(int x, int y, bool scoring = true)
+        public int FindeGleicheNachbarn(int x, int y)
         {
             BubbleFarbe farbe = Matrix[x, y].Farbe;
             GefundeneGleichfarbigeZellen = 0;
@@ -125,7 +92,7 @@ namespace BubbleBreakerConsole.Models
             maxY = y;
 
             GleicheNachbarnFindenRekursiv(x, y, farbe);
-            if (scoring) Score += (GefundeneGleichfarbigeZellen * (GefundeneGleichfarbigeZellen - 1));
+            Score += (GefundeneGleichfarbigeZellen * (GefundeneGleichfarbigeZellen - 1));
             return GefundeneGleichfarbigeZellen;
         }
 
@@ -135,7 +102,6 @@ namespace BubbleBreakerConsole.Models
         public void EnferneAusgewaehlteBubbles()
         {
             for (int x = minX; x <= maxX; x++)
-            {
                 for (int y = minY; y <= maxY; y++)
                 {
                     // Nur falls Zellstatus ausgewaehlt ist Code ausführen
@@ -148,23 +114,19 @@ namespace BubbleBreakerConsole.Models
                         Matrix[0, y].Löschen();
 
                         // Pruefen ob Spalte leer ist und falls ja Zellen der linken Nachbarspalte nach rechts schieben
-                        if (Matrix[9, y].Status == ZellStatus.Leer)
+                        if (Matrix[Zeilen - 1, y].Status == ZellStatus.Leer)
                         {
                             for (int i = y; i >= 0; i--)
-                            {
-                                for (int j = 0; j < 10; j++)
+                                for (int j = 0; j < Zeilen; j++)
                                 {
                                     if (i == 0)
                                         Matrix[j, i].Löschen();
                                     else
                                         Matrix[j, i].VonZelleUebertragen(Matrix[j, i - 1]);
                                 }
-                            }
                         }
                     }
                 }
-
-            }
         }
 
         /// <summary>
@@ -173,21 +135,16 @@ namespace BubbleBreakerConsole.Models
         /// <returns></returns>
         public bool EsGibtGleicheNachbarnUndMatrixIstNichtLeer()
         {
-            if (Matrix[9, 9].Status == ZellStatus.Leer) return false; // wenn die letzte Zelle leer ist müssen alle anderen auch leer sein!
-            for (int i = 9; i >= 0; i--)
-            {
-                for (int j = 9; j >= 0; j--)
-                {
+            if (Matrix[Zeilen - 1, Spalten - 1].Status == ZellStatus.Leer) return false; // wenn die letzte Zelle leer ist müssen alle anderen auch leer sein!
+            for (int i = Zeilen - 1; i >= 0; i--)
+                for (int j = Spalten - 1; j >= 0; j--)
                     if (Matrix[i, j].Status == ZellStatus.Belegt)
                     {
-                        if (j + 1 <= 9) if (Matrix[i, j].FarbVergleich(Matrix[i, j + 1].Farbe)) return true;
+                        if (j + 1 < Spalten) if (Matrix[i, j].FarbVergleich(Matrix[i, j + 1].Farbe)) return true;
                         if (j - 1 >= 0) if (Matrix[i, j].FarbVergleich(Matrix[i, j - 1].Farbe)) return true;
-                        if (i + 1 <= 9) if (Matrix[i, j].FarbVergleich(Matrix[i + 1, j].Farbe)) return true;
+                        if (i + 1 < Zeilen) if (Matrix[i, j].FarbVergleich(Matrix[i + 1, j].Farbe)) return true;
                         if (i - 1 >= 0) if (Matrix[i, j].FarbVergleich(Matrix[i - 1, j].Farbe)) return true;
-
                     }
-                }
-            }
             return false;
         }
     }

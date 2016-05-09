@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Bubble.cs" />
     <Compile Include="BubbleFarbe.cs" />
     <Compile Include="GameMatrix.cs" />
     <Compile Include="Program.cs" />

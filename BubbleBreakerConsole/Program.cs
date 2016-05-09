@@ -16,7 +16,7 @@ namespace BubbleBreakerConsole
 
             GameMatrix spielMatrix = new GameMatrix();
             spielMatrix.ResetMatrix();
-            Console.WriteLine(spielMatrix.AusgebenMatrix());
+            Console.WriteLine(MatrixAusgeben(spielMatrix));
 
             // Main Loop
             while (spielMatrix.EsGibtGleicheNachbarnUndMatrixIstNichtLeer())
@@ -33,12 +33,46 @@ namespace BubbleBreakerConsole
                 spielMatrix.EnferneAusgewaehlteBubbles();
 
                 Console.WriteLine();
-                Console.WriteLine(spielMatrix.AusgebenMatrix());
+                Console.WriteLine(MatrixAusgeben(spielMatrix));
             }
 
             Console.WriteLine();
             Console.WriteLine("Spiel ist zu ende! Kein weiterer Zug möglich!");
             Console.ReadLine();
+        }
+
+        /// <summary>
+        /// Ausgabe der Matrix, trennung Präsentationslogic von spiel Logic !!!
+        /// </summary>
+        /// <param name="matrix"></param>
+        /// <returns></returns>
+        static string MatrixAusgeben(GameMatrix matrix)
+        {
+            string result = "";
+            string crlf = Environment.NewLine;
+            string xAchse = "   | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |  " + crlf;
+            string xDiv = " ---------------------------------------------" + crlf;
+            string Zeile = "";
+            string punkte = string.Format("Punktzahl: {0}", matrix.Score) + crlf + crlf;
+
+            result += punkte;
+            result += xAchse;
+            result += xDiv;
+
+            for (int i = 0; i < matrix.Zeilen; i++) // Zeilen
+            {
+                Zeile = string.Format(" {0} |", i);
+                for (int j = 0; j < matrix.Spalten; j++)
+                {
+                    Zeile += string.Format(" {0} |", matrix.ZelleDerAdresse(i,j).FarbRepraesentation());
+                }
+                Zeile += string.Format(" {0}", i);
+                Zeile += crlf;
+                result += Zeile;
+                result += xDiv;
+            }
+            result += xAchse;
+            return result;
         }
     }
 }
