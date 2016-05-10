@@ -38,12 +38,20 @@ namespace BubbleBreakerUWP
             Highscore = 0;
         }
 
+        /// <summary>
+        /// aktuellen Score anzeigen und Highscore aktualisieren
+        /// </summary>
         private void PunktzahlAnzeigen()
         {
             Highscore = Math.Max(Highscore, SpielLogik.Score);
             Punktzahl.Text = $"Punktzahl: {SpielLogik.Score}   Highscore: {Highscore}";
         }
 
+        /// <summary>
+        /// Neues Spiel starten (Erzeugen neues Spiel und Gfx Objekt, Initialisieren, Erstmalige Anzeige)
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             StartMsg.Visibility = Visibility.Collapsed;
@@ -55,6 +63,11 @@ namespace BubbleBreakerUWP
             MyCanvas.PointerPressed += MyCanvas_PointerPressed;
         }
 
+        /// <summary>
+        /// Mausklick / Touch verarbeiten. Erkennen ob das Spiel zu Ende ist
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MyCanvas_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             Point zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);

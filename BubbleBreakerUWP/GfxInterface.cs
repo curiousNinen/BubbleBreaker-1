@@ -12,6 +12,9 @@ using Windows.UI.Xaml.Shapes;
 
 namespace BubbleBreakerUWP
 {
+    /// <summary>
+    /// Klasse welche die Anzeige der Bubble handhabt
+    /// </summary>
     public class GfxInterface
     {
         private Canvas _canvas;
@@ -22,6 +25,11 @@ namespace BubbleBreakerUWP
 
         public double ZellMass { get; private set; }
 
+        /// <summary>
+        /// Konstruktor Initialisiert die Verweise auf benötigte Objekte der Oberfläche und der Spiel Logik
+        /// </summary>
+        /// <param name="canvas">Objekt für die Zeichenfläche</param>
+        /// <param name="matrix">Spiel Logik Objekt</param>
         public GfxInterface(Canvas canvas, GameMatrix matrix)
         {
             _canvas = canvas;
@@ -36,6 +44,10 @@ namespace BubbleBreakerUWP
 
         }
 
+        /// <summary>
+        /// Ermittelt die Hoehe und Breite einer Zelle der Matrix
+        /// </summary>
+        /// <returns></returns>
         private double PlatzProZelle()
         {
             double breite = _canvas.ActualWidth - 10;
@@ -45,12 +57,23 @@ namespace BubbleBreakerUWP
             return (double)((uint)(minCanvasBH / maxMatrixBH));
         }
 
+        /// <summary>
+        /// Ermittelt die Top, Left für eine Zelle im Ausgabe Koordinatensystem
+        /// </summary>
+        /// <param name="z"></param>
+        /// <param name="s"></param>
+        /// <returns></returns>
         private Tuple<double, double> ZelleNachZeileSpalte(int z, int s)
         {
             double y = 5 + (ZellMass * z) + 2;
             return new Tuple<double, double>(5 + (ZellMass * z) + 2, 5 + (ZellMass * s) + 2);
         }
 
+        /// <summary>
+        /// Ermitteln anhand einer Koordinate der Bildschirmausgabe die Adresse in der Spiel Logik Matrix
+        /// </summary>
+        /// <param name="point"></param>
+        /// <returns></returns>
         public Point ZellAdresseBerechnen(Point point)
         {
             Point result;
@@ -59,6 +82,10 @@ namespace BubbleBreakerUWP
             return result;
         }
 
+        /// <summary>
+        /// Gibt die Bubble Matrix ohne Animationanhand des aktuellen Spielstands aus
+        /// Die Matrix wird immer komplett neu gezeichnet
+        /// </summary>
         public void BubblesAnzeigen()
         {
             _bubbles = new Ellipse[_matrix.Zeilen, _matrix.Spalten];
