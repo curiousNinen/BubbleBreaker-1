@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI;
+using Windows.UI.Input;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -27,41 +28,47 @@ namespace BubbleBreakerUWP
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private GameMatrix SpielLogik;
+        private GfxInterface SpielGfx;
+        private int Highscore;
+
         public MainPage()
         {
             this.InitializeComponent();
+            Highscore = 0;
         }
 
-        private Line line;
-        private Ellipse ellipse;
-        private Rectangle rectangle;
-        private SolidColorBrush brush;
-        private List<UIElement> elements = new List<UIElement>();
-
-        private GameMatrix SpielLogik;
-        private GfxInterface SpielGfx;
+        private void PunktzahlAnzeigen()
+        {
+            Highscore = Math.Max(Highscore, SpielLogik.Score);
+            Punktzahl.Text = $"Punktzahl: {SpielLogik.Score}   Highscore: {Highscore}";
+        }
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            StartMsg.Visibility = Visibility.Collapsed;
             SpielLogik = new GameMatrix(10, 10);
             SpielGfx = new GfxInterface(MyCanvas, SpielLogik);
             SpielLogik.ResetMatrix();
-            SpielGfx.BubblesErzeugen();
+            SpielGfx.BubblesAnzeigen();
+            PunktzahlAnzeigen();
+            MyCanvas.PointerPressed += MyCanvas_PointerPressed;
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private void MyCanvas_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            int zeile = int.Parse(Zeile.Text);
-            int spalte = int.Parse(Spalte.Text);
-            int r = SpielLogik.FindeGleicheNachbarn(zeile, spalte);
+            Point zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
+            int r = SpielLogik.FindeGleicheNachbarn((int)zellAdr.Y, (int)zellAdr.X);
             SpielLogik.EnferneAusgewaehlteBubbles();
-            SpielGfx.BubblesErzeugen();
+            SpielGfx.BubblesAnzeigen();
+            PunktzahlAnzeigen();
+
+            if (!SpielLogik.EsGibtGleicheNachbarnUndMatrixIstNichtLeer())
+            {
+                // Spiel zu Ende
+                MyCanvas.PointerPressed -= MyCanvas_PointerPressed;
+                StartMsg.Visibility = Visibility.Visible;
+            }
         }
-
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-        }
-
-
     }
 }

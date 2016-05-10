@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
@@ -19,7 +20,7 @@ namespace BubbleBreakerUWP
 
         private Ellipse[,] _bubbles;
 
-        private double _zellMass;
+        public double ZellMass { get; private set; }
 
         public GfxInterface(Canvas canvas, GameMatrix matrix)
         {
@@ -31,7 +32,7 @@ namespace BubbleBreakerUWP
             _farben[BubbleFarbe.Blau] = new SolidColorBrush(Colors.Blue);
             _farben[BubbleFarbe.Violett] = new SolidColorBrush(Colors.Purple);
 
-            _zellMass = PlatzProZelle();
+            ZellMass = PlatzProZelle();
 
         }
 
@@ -46,11 +47,19 @@ namespace BubbleBreakerUWP
 
         private Tuple<double, double> ZelleNachZeileSpalte(int z, int s)
         {
-            double y = 5 + (_zellMass * z) + 2;
-            return new Tuple<double, double>(5 + (_zellMass * z) + 2, 5 + (_zellMass * s) + 2);
+            double y = 5 + (ZellMass * z) + 2;
+            return new Tuple<double, double>(5 + (ZellMass * z) + 2, 5 + (ZellMass * s) + 2);
         }
 
-        public void BubblesErzeugen()
+        public Point ZellAdresseBerechnen(Point point)
+        {
+            Point result;
+            result.Y = (point.Y - 5) / ZellMass;
+            result.X = (point.X - 5) / ZellMass;
+            return result;
+        }
+
+        public void BubblesAnzeigen()
         {
             _bubbles = new Ellipse[_matrix.Zeilen, _matrix.Spalten];
             _canvas.Children.Clear();
@@ -65,8 +74,8 @@ namespace BubbleBreakerUWP
                         _bubbles[i, j] = new Ellipse()
                         {
                             StrokeThickness = 1.0,
-                            Height = _zellMass - 4,
-                            Width = _zellMass - 4,
+                            Height = ZellMass - 4,
+                            Width = ZellMass - 4,
                             Stroke = _farben[zelle.Farbe],
                             Fill = _farben[zelle.Farbe]
                         };
