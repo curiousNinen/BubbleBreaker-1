@@ -89,15 +89,25 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
-    <Content Include="ApplicationInsights.config">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\BubbleBreakerConsole\BubbleFarbe.cs">
+      <Link>BubbleFarbe.cs</Link>
+    </Compile>
+    <Compile Include="..\BubbleBreakerConsole\GameMatrix.cs">
+      <Link>GameMatrix.cs</Link>
+    </Compile>
+    <Compile Include="..\BubbleBreakerConsole\Zelle.cs">
+      <Link>Zelle.cs</Link>
+    </Compile>
+    <Compile Include="..\BubbleBreakerConsole\ZellStatus.cs">
+      <Link>ZellStatus.cs</Link>
+    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GfxInterface.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
