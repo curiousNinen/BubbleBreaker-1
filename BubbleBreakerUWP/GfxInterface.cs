@@ -86,22 +86,5 @@ namespace BubbleBreakerUWP
                 }
             }
         }
-
-
-        //public void SpielfeldAusgeben()
-        //{
-        //    for (int i = 0; i < _matrix.Zeilen; i++)
-        //    {
-        //        for (int j = 0; j < _matrix.Spalten; j++)
-        //        {
-        //            Zelle zelle = _matrix.ZelleDerAdresse(i, j);
-        //            if (zelle.Status == ZellStatus.Belegt)
-        //            {
-        //                Tupple2 topleft = BerechneZellKoordinate(i, j);
-
-        //            }
-        //        }
-        //    }
-        //}
     }
 }
