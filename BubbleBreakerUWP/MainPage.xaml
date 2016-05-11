@@ -13,10 +13,10 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal">
-            <Button Content="Neues Spiel" Click="Button_Click" Margin="5" />
-            <TextBlock x:Name="Punktzahl" FontSize="30" />
+            <Button Content="Neues Spiel" Click="Button_Click" Margin="5"/>
+            <TextBlock x:Name="Punktzahl" FontSize="20" Margin="5"/>
         </StackPanel>
-        <Canvas x:Name="MyCanvas" Grid.Row="1" Height="500" Width="500" Background="#FFF0F075" />
-        <TextBlock x:Name="StartMsg" Grid.Row="1" FontSize="50" Text="Spiel neu starten?" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        <Canvas x:Name="MyCanvas" Grid.Row="1" Height="500" Width="500" Background="#FFFBF45C" />
+        <TextBlock x:Name="StartMsg" Grid.Row="1" FontSize="50" Text="Spiel neu starten?" HorizontalAlignment="Center" VerticalAlignment="Center" />
     </Grid>
 </Page>
