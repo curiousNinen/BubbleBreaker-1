@@ -8,43 +8,35 @@ namespace BubbleBreakerConsole.Models
 {
     public class Zelle
     {
-        /// <summary>
-        /// Verweis auf einen Bubble, intern
-        /// </summary>
-        private Bubble ZellBubble = null;
-
-        /// <summary>
-        /// Zellstatus
-        /// </summary>
+        // Sichtbare Klassenattribute
         public ZellStatus Status { get; private set; }
+        public BubbleFarbe Farbe { get; private set; }
 
         /// <summary>
-        /// Durchreichen der Farbe eines Bubbles einer Zelle mit Standardwert Transparent falls nicht belegt
-        /// </summary>
-        public BubbleFarbe FarbeDesBubble => ZellBubble != null ? ZellBubble.Farbe : BubbleFarbe.Transparent;
-
-        /// <summary>
-        /// Konstruktor: Initialisiert eine Leere Zelle
+        /// Konstruktor: Initialisiert eine leere Zelle
         /// </summary>
         public Zelle()
         {
-            ZelleLeeren();
+            Löschen();
         }
 
         /// <summary>
         /// Zelle mit einem Bubble füllen und Status entsprechend setzen
         /// </summary>
         /// <param name="bubble"></param>
-        public void ZelleVergeben(Bubble bubble)
+        public void FarbeFestlegen(BubbleFarbe farbe)
         {
-            ZellBubble = bubble;
-            Status = ZellStatus.Besetzt;
+            Farbe = farbe;
+            if (Farbe == BubbleFarbe.Leer)
+                Status = ZellStatus.Leer;
+            else
+                Status = ZellStatus.Belegt;
         }
 
         /// <summary>
         /// Zelle für Rotationsbewegung markieren und Staus entsprechend setzen
         /// </summary>
-        public void ZelleAuswaehlen()
+        public void Auswaehlen()
         {
             Status = ZellStatus.Ausgewaehlt;
         }
@@ -52,10 +44,9 @@ namespace BubbleBreakerConsole.Models
         /// <summary>
         /// Zelleninhalt löschen und Status entsprechend setzen
         /// </summary>
-        public void ZelleLeeren()
+        public void Löschen()
         {
-            ZellBubble = null;
-            Status = ZellStatus.Leer;
+            FarbeFestlegen(BubbleFarbe.Leer);
         }
 
         /// <summary>
@@ -65,16 +56,7 @@ namespace BubbleBreakerConsole.Models
         /// <returns>True, wenn Übereinstimming</returns>
         public bool FarbVergleich(BubbleFarbe farbe)
         {
-            return ZellBubble?.Farbe == farbe;
-        }
-
-        /// <summary>
-        /// Auswahl bei gleicher Farbe
-        /// </summary>
-        /// <param name="farbe"></param>
-        public void BeiGleicherFarbeAuswahlen(BubbleFarbe farbe)
-        {
-            if (FarbVergleich(farbe)) ZelleAuswaehlen();
+            return Farbe == farbe;
         }
 
         /// <summary>
@@ -83,17 +65,25 @@ namespace BubbleBreakerConsole.Models
         /// <param name="zelle"></param>
         public void VonZelleUebertragen(Zelle zelle)
         {
-            ZellBubble = zelle.ZellBubble;
+            Farbe = zelle.Farbe;
             Status = zelle.Status;
         }
 
-        /// <summary>
-        /// Ausgabe des Buchstaben oder eines Leerzeichen falls zelle leer (Optimierungspotential! in der zelle oder dem Bubble)
-        /// </summary>
-        /// <returns></returns>
-        public string BubbleZeichnen()
+        public string FarbRepraesentation()
         {
-            return ZellBubble != null ? ZellBubble.Farbcode() : " ";
+            switch (Farbe)
+            {
+                case BubbleFarbe.Blau:
+                    return "B";
+                case BubbleFarbe.Gruen:
+                    return "G";
+                case BubbleFarbe.Rot:
+                    return "R";
+                case BubbleFarbe.Violett:
+                    return "V";
+                default:
+                    return " ";
+            }
         }
     }
 }
