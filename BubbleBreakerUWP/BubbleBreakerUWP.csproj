@@ -133,8 +133,8 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BubbleBreakerLib\BubbleBreakerLib.csproj">
-      <Project>{2d83262f-eade-486e-a2a8-e42cbd65787b}</Project>
+    <ProjectReference Include="..\BubbleBreakerPCL\BubbleBreakerLib.csproj">
+      <Project>{cab6e22e-61c4-4e42-846b-08459650ba93}</Project>
       <Name>BubbleBreakerLib</Name>
     </ProjectReference>
   </ItemGroup>

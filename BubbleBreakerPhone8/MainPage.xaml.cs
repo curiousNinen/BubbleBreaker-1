@@ -1,6 +1,4 @@
-﻿using BubbleBreakerLib;
-using BubbleBreakerUWP;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,6 +12,7 @@ using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using BubbleBreakerLib;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=391641
 
@@ -86,7 +85,7 @@ namespace BubbleBreakerPhone8
         /// <param name="e"></param>
         private void MyCanvas_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Point zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetPosition(MyCanvas));
+            Position zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetPosition(MyCanvas));
             SpielGfx.ZeigeZellFokus(zellAdr);
         }
 
@@ -97,7 +96,7 @@ namespace BubbleBreakerPhone8
         /// <param name="e"></param>
         private void MyCanvas_PointerMoved(object sender, PointerRoutedEventArgs e)
         {
-            Point zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
+            Position zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
             SpielGfx.ZeigeZellFokus(zellAdr);
         }
 
@@ -108,8 +107,8 @@ namespace BubbleBreakerPhone8
         /// <param name="e"></param>
         private void MyCanvas_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            Point zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
-            int r = SpielLogik.FindeGleicheNachbarn((int)zellAdr.Y, (int)zellAdr.X);
+            Position zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
+            int r = SpielLogik.FindeGleicheNachbarn(zellAdr);
             SpielLogik.EnferneAusgewaehlteBubbles();
             SpielGfx.BubblesAnzeigen();
             SpielGfx.ZeigeZellFokus(zellAdr, true);

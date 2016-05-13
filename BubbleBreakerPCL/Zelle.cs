@@ -11,12 +11,19 @@ namespace BubbleBreakerLib
         // Sichtbare Klassenattribute
         public ZellStatus Status { get; private set; }
         public BubbleFarbe Farbe { get; private set; }
+        public int Zeile { get; } // Jede Zelle kennt seine eigene Position in der Matrix
+        public int Spalte { get; }
+        public bool Ausgewaehlt => Status == ZellStatus.Ausgewaehlt;
+        public bool Belegt => Status == ZellStatus.Belegt;
+        public bool Leer => Status == ZellStatus.Leer;
 
         /// <summary>
         /// Konstruktor: Initialisiert eine leere Zelle
         /// </summary>
-        public Zelle()
+        public Zelle(int zeile = 0, int spalte = 0)
         {
+            Zeile = zeile;
+            Spalte = spalte;
             Löschen();
         }
 

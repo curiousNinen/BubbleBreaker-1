@@ -72,8 +72,8 @@ namespace BubbleBreakerUWP
         /// <param name="e"></param>
         private void MyCanvas_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            Point zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetPosition(MyCanvas));
-            SpielGfx.ZeigeZellFokus(zellAdr);
+            Position position = SpielGfx.ZellAdresseBerechnen(e.GetPosition(MyCanvas));
+            SpielGfx.ZeigeZellFokus(position);
         }
 
         /// <summary>
@@ -83,8 +83,8 @@ namespace BubbleBreakerUWP
         /// <param name="e"></param>
         private void MyCanvas_PointerMoved(object sender, PointerRoutedEventArgs e)
         {
-            Point zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
-            SpielGfx.ZeigeZellFokus(zellAdr);
+            Position position = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
+            SpielGfx.ZeigeZellFokus(position);
         }
 
         /// <summary>
@@ -94,11 +94,11 @@ namespace BubbleBreakerUWP
         /// <param name="e"></param>
         private void MyCanvas_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
-            Point zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
-            int r = SpielLogik.FindeGleicheNachbarn((int)zellAdr.Y, (int)zellAdr.X);
+            Position position = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
+            int r = SpielLogik.FindeGleicheNachbarn(position);
             SpielLogik.EnferneAusgewaehlteBubbles();
             SpielGfx.BubblesAnzeigen();
-            SpielGfx.ZeigeZellFokus(zellAdr, true);
+            SpielGfx.ZeigeZellFokus(position, true);
             PunktzahlAnzeigen();
 
             if (!SpielLogik.EsGibtGleicheNachbarnUndMatrixIstNichtLeer())
