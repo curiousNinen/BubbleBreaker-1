@@ -30,7 +30,7 @@ namespace BubbleBreakerLib
             Matrix = new Zelle[Zeilen, Spalten];
             for (int zeile = 0; zeile < Zeilen; zeile++)
                 for (int spalte = 0; spalte < Spalten; spalte++)
-                    Matrix[zeile, spalte] = new Zelle();
+                    Matrix[zeile, spalte] = new Zelle(zeile, spalte);
         }
 
         /// <summary>
