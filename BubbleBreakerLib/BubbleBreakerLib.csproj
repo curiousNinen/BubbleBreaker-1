@@ -5,11 +5,11 @@
     <MinimumVisualStudioVersion>12.0</MinimumVisualStudioVersion>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{CAB6E22E-61C4-4E42-846B-08459650BA93}</ProjectGuid>
+    <ProjectGuid>{937BE89C-76D2-4513-91A9-9C18A5F7E312}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BubbleBreakerPCL</RootNamespace>
-    <AssemblyName>BubbleBreakerPCL</AssemblyName>
+    <RootNamespace>BubbleBreakerLib</RootNamespace>
+    <AssemblyName>BubbleBreakerLib</AssemblyName>
     <DefaultLanguage>en-US</DefaultLanguage>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{786C830F-07A1-408B-BD7F-6EE04809D6DB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
