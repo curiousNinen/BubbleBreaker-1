@@ -1,5 +1,4 @@
-﻿using BubbleBreakerConsole.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +9,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Shapes;
+using BubbleBreakerLib;
 
 namespace BubbleBreakerUWP
 {

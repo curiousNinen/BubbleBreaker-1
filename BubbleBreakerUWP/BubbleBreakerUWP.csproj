@@ -96,18 +96,6 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\BubbleBreakerConsole\BubbleFarbe.cs">
-      <Link>BubbleFarbe.cs</Link>
-    </Compile>
-    <Compile Include="..\BubbleBreakerConsole\GameMatrix.cs">
-      <Link>GameMatrix.cs</Link>
-    </Compile>
-    <Compile Include="..\BubbleBreakerConsole\Zelle.cs">
-      <Link>Zelle.cs</Link>
-    </Compile>
-    <Compile Include="..\BubbleBreakerConsole\ZellStatus.cs">
-      <Link>ZellStatus.cs</Link>
-    </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
@@ -143,6 +131,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BubbleBreakerLib\BubbleBreakerLib.csproj">
+      <Project>{2d83262f-eade-486e-a2a8-e42cbd65787b}</Project>
+      <Name>BubbleBreakerLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

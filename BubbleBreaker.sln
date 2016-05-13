@@ -1,13 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BubbleBreakerConsole", "BubbleBreakerConsole\BubbleBreakerConsole.csproj", "{F592D8EE-64AD-49D1-9CC9-9B335581CEA8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BubbleBreakerLib", "BubbleBreakerLib\BubbleBreakerLib.csproj", "{2D83262F-EADE-486E-A2A8-E42CBD65787B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BubbleBreakerUWP", "BubbleBreakerUWP\BubbleBreakerUWP.csproj", "{2A765976-8BB0-45BF-9695-2B8D9A743AE7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{2D83262F-EADE-486E-A2A8-E42CBD65787B} = {2D83262F-EADE-486E-A2A8-E42CBD65787B}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
