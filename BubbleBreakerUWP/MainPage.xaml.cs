@@ -1,5 +1,4 @@
-﻿using BubbleBreakerConsole.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -18,6 +17,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
+using BubbleBreakerLib;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -61,6 +61,13 @@ namespace BubbleBreakerUWP
             SpielGfx.BubblesAnzeigen();
             PunktzahlAnzeigen();
             MyCanvas.PointerPressed += MyCanvas_PointerPressed;
+            MyCanvas.PointerMoved += MyCanvas_PointerMoved;
+        }
+
+        private void MyCanvas_PointerMoved(object sender, PointerRoutedEventArgs e)
+        {
+            Point zellAdr = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
+            SpielGfx.ZeigeZellFokus(zellAdr);
         }
 
         /// <summary>
@@ -74,11 +81,13 @@ namespace BubbleBreakerUWP
             int r = SpielLogik.FindeGleicheNachbarn((int)zellAdr.Y, (int)zellAdr.X);
             SpielLogik.EnferneAusgewaehlteBubbles();
             SpielGfx.BubblesAnzeigen();
+            SpielGfx.ZeigeZellFokus(zellAdr, true);
             PunktzahlAnzeigen();
 
             if (!SpielLogik.EsGibtGleicheNachbarnUndMatrixIstNichtLeer())
             {
                 // Spiel zu Ende
+                MyCanvas.PointerMoved -= MyCanvas_PointerMoved;
                 MyCanvas.PointerPressed -= MyCanvas_PointerPressed;
                 StartMsg.Visibility = Visibility.Visible;
             }

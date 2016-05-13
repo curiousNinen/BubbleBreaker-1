@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace BubbleBreakerLib
 {
-    public class Class1
+    /// <summary>
+    /// Möglicher Status einer Zelle
+    /// </summary>
+    public enum ZellStatus
     {
+        Belegt,
+        Ausgewaehlt,
+        Leer
     }
 }
