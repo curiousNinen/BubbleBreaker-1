@@ -15,6 +15,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 using BubbleBreakerLib;
+using BubbleBreakerGfxLib;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -26,9 +27,9 @@ namespace AnimationTest
     public sealed partial class MainPage : Page
     {
         private Sprite _sprite;
-        private DispatcherTimer timer;
-        private int tick;
-        private int frames;
+        //private DispatcherTimer timer;
+        //private int tick;
+        //private int frames;
         private List<Sprite> _sprites = new List<Sprite>();
 
         private SpriteBatch _batch;

@@ -7,7 +7,7 @@ using BubbleBreakerLib;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace AnimationTest
+namespace BubbleBreakerGfxLib
 {
     public class Sprite
     {

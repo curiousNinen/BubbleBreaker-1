@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 
-namespace AnimationTest
+namespace BubbleBreakerGfxLib
 {
     public class SpriteBatch
     {
