@@ -53,8 +53,7 @@ namespace BubbleBreakerLib
 
             ZellMass = PlatzProZelle();
 
-            _letzterFokus.Zeile = -1;
-            _letzterFokus.Spalte = -1;
+            _letzterFokus = new Position(-1, -1);
 
             _fokus = ErzeugeFokusObjekt();
             _fokusAn = false;

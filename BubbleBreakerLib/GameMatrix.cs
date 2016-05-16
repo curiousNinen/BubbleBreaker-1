@@ -12,8 +12,12 @@ namespace BubbleBreakerLib
         public int Score { get; set; } = 0;             // aktueller Gesamt Score
         public int Zeilen { get; }         // Anzahl der Zeilen der Matrix
         public int Spalten { get; }        // Anzahl der Spalten der Matrix
-        public Zelle ZelleDerAdresse(int zeile, int spalte) 
-            => Matrix[Math.Min(Math.Max(zeile,0),Zeilen-1), Math.Min(Math.Max(spalte, 0), Spalten - 1)];
+        public Zelle ZelleDerAdresse(int zeile, int spalte)
+            => Matrix[Math.Min(Math.Max(zeile, 0), Zeilen - 1), Math.Min(Math.Max(spalte, 0), Spalten - 1)];
+        public int Zuege { get; private set; }
+        public double BonusFaktor
+            => Zeilen * Spalten / Zuege * ((Matrix[Zeilen - 1, Spalten - 1].Leer) ? 2 : 1);
+        public int GesamtScore => (int)(Score * BonusFaktor);
 
         // Private nicht sichtbare schnittstelle des Objekts
         private Zelle[,] Matrix;                        // Spielmatrix
@@ -39,6 +43,7 @@ namespace BubbleBreakerLib
         public void ResetMatrix()
         {
             Score = 0;
+            Zuege = 1;
             Random rnd = new Random();
             for (int zeile = 0; zeile < Zeilen; zeile++)
                 for (int spalte = 0; spalte < Spalten; spalte++)
@@ -56,7 +61,7 @@ namespace BubbleBreakerLib
         /// <param name="farbe"></param>
         protected void GleicheNachbarnFindenRekursiv(int zeile, int spalte, BubbleFarbe farbe)
         {
-            if (Matrix[zeile, spalte].FarbVergleich(farbe) && Matrix[zeile, spalte].Status != ZellStatus.Ausgewaehlt)
+            if (Matrix[zeile, spalte].FarbVergleich(farbe) && !Matrix[zeile, spalte].Ausgewaehlt)
             {
                 Matrix[zeile, spalte].Auswaehlen();
                 GefundeneGleichfarbigeNachbarn++;
@@ -97,6 +102,7 @@ namespace BubbleBreakerLib
 
             GleicheNachbarnFindenRekursiv(zeile, spalte, farbe);
             Score += (GefundeneGleichfarbigeNachbarn * (GefundeneGleichfarbigeNachbarn - 1));
+            Zuege++;
             return GefundeneGleichfarbigeNachbarn;
         }
 
@@ -114,7 +120,7 @@ namespace BubbleBreakerLib
                 for (int spalte = minSpalte; spalte <= maxSpalte; spalte++)
                 {
                     // Nur falls Zellstatus ausgewaehlt ist Code ausführen
-                    if (Matrix[zeile, spalte].Status == ZellStatus.Ausgewaehlt)
+                    if (Matrix[zeile, spalte].Ausgewaehlt)
                     {
                         for (int i = zeile; i > 0; i--)
                         {
@@ -123,7 +129,7 @@ namespace BubbleBreakerLib
                         Matrix[0, spalte].Löschen();
 
                         // Pruefen ob Spalte leer ist und falls ja Zellen der linken Nachbarspalte nach rechts schieben
-                        if (Matrix[Zeilen - 1, spalte].Status == ZellStatus.Leer)
+                        if (Matrix[Zeilen - 1, spalte].Leer)
                         {
                             for (int i = spalte; i >= 0; i--)
                                 for (int j = 0; j < Zeilen; j++)
@@ -144,16 +150,16 @@ namespace BubbleBreakerLib
         /// <returns>True, wenn noch ein Zug möglich ist</returns>
         public bool EsGibtGleicheNachbarnUndMatrixIstNichtLeer()
         {
-            if (Matrix[Zeilen - 1, Spalten - 1].Status == ZellStatus.Leer) return false; // wenn die letzte Zelle leer ist müssen alle anderen auch leer sein!
-            for (int zeile = Zeilen - 1; zeile >= 0; zeile--)
-                for (int spalte = Spalten - 1; spalte >= 0; spalte--)
-                    if (Matrix[zeile, spalte].Status == ZellStatus.Belegt)
-                    {
-                        if (spalte + 1 < Spalten) if (Matrix[zeile, spalte].FarbVergleich(Matrix[zeile, spalte + 1].Farbe)) return true;
-                        if (spalte - 1 >= 0) if (Matrix[zeile, spalte].FarbVergleich(Matrix[zeile, spalte - 1].Farbe)) return true;
-                        if (zeile + 1 < Zeilen) if (Matrix[zeile, spalte].FarbVergleich(Matrix[zeile + 1, spalte].Farbe)) return true;
-                        if (zeile - 1 >= 0) if (Matrix[zeile, spalte].FarbVergleich(Matrix[zeile - 1, spalte].Farbe)) return true;
-                    }
+            if (!Matrix[Zeilen - 1, Spalten - 1].Leer) // wenn die letzte Zelle leer ist müssen alle anderen auch leer sein!
+                for (int zeile = Zeilen - 1; zeile >= 0; zeile--)
+                    for (int spalte = Spalten - 1; spalte >= 0; spalte--)
+                        if (Matrix[zeile, spalte].Belegt)
+                        {
+                            if (spalte + 1 < Spalten) if (Matrix[zeile, spalte].FarbVergleich(Matrix[zeile, spalte + 1].Farbe)) return true;
+                            if (spalte - 1 >= 0) if (Matrix[zeile, spalte].FarbVergleich(Matrix[zeile, spalte - 1].Farbe)) return true;
+                            if (zeile + 1 < Zeilen) if (Matrix[zeile, spalte].FarbVergleich(Matrix[zeile + 1, spalte].Farbe)) return true;
+                            if (zeile - 1 >= 0) if (Matrix[zeile, spalte].FarbVergleich(Matrix[zeile - 1, spalte].Farbe)) return true;
+                        }
             return false;
         }
     }

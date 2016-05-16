@@ -44,7 +44,13 @@ namespace BubbleBreakerUWP
         private void PunktzahlAnzeigen()
         {
             Highscore = Math.Max(Highscore, SpielLogik.Score);
-            Punktzahl.Text = $"Punktzahl: {SpielLogik.Score}   Highscore: {Highscore}";
+            Punktzahl.Text = $"Zug: {SpielLogik.Zuege}  Punktzahl: {SpielLogik.Score}  Bonusfaktor: {SpielLogik.BonusFaktor} Highscore: {Highscore}";
+        }
+
+        private void GesamtScoreAnzeigen()
+        {
+            Highscore = Math.Max(Highscore, SpielLogik.GesamtScore);
+            Punktzahl.Text = $"benötigte Züge: {SpielLogik.Zuege}  Punktzahl inkl. Bonusfaktor: {SpielLogik.GesamtScore}  Highscore: {Highscore}";
         }
 
         /// <summary>
@@ -107,6 +113,7 @@ namespace BubbleBreakerUWP
                 MyCanvas.PointerMoved -= MyCanvas_PointerMoved;
                 MyCanvas.PointerPressed -= MyCanvas_PointerPressed;
                 StartMsg.Visibility = Visibility.Visible;
+                GesamtScoreAnzeigen();
             }
         }
     }

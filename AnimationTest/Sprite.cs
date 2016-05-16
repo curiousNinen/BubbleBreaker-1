@@ -16,9 +16,9 @@ namespace AnimationTest
         public Position TargetPosition { get; private set; }
         public UIElement Itself { get; private set; }
 
-        public Sprite(UIElement itself, Position topLeftStart)
+        public Sprite(UIElement sprite, Position topLeftStart)
         {
-            Itself = itself;
+            Itself = sprite;
             SetStartPosition(topLeftStart);
         }
 
@@ -42,10 +42,10 @@ namespace AnimationTest
             Canvas.SetLeft(Itself, CurrentPosition.Left);
         }
 
-        public void ChangePositionOnTick(int tick, int frames)
+        public void ChangePositionOnTick(double tick, double frames)
         {
-            //if (StartPosition.Equals(TargetPosition)) return;
-            double coeff = (double)tick / frames;
+            if (StartPosition.Equals(TargetPosition)) return;
+            double coeff = tick / frames;
             double top = (StartPosition.Top + (TargetPosition.Top - StartPosition.Top) * coeff);
             double left = (StartPosition.Left + (TargetPosition.Left - StartPosition.Left) * coeff);
             CurrentPosition.Top = (int)top;

@@ -26,10 +26,21 @@ namespace AnimationTest
     public sealed partial class MainPage : Page
     {
         private Sprite _sprite;
+        private DispatcherTimer timer;
+        private int tick;
+        private int frames;
+        private List<Sprite> _sprites = new List<Sprite>();
 
+        private SpriteBatch _batch;
+        
         public MainPage()
         {
             this.InitializeComponent();
+            _batch = new SpriteBatch();
+            //frames = 15;
+            //timer = new DispatcherTimer();
+            //timer.Tick += Timer_Tick;
+            //timer.Interval = new TimeSpan(0, 0, 0, 0, 30);
         }
 
         private void AnzeigeKoordinaten()
@@ -40,7 +51,8 @@ namespace AnimationTest
 
         private void StartClick(object sender, RoutedEventArgs e)
         {
-            Ellipse item = new Ellipse()
+            _sprites.Clear();
+            UIElement item = new Ellipse()
             {
                 StrokeThickness = 5.0,
                 Height = 60,
@@ -49,22 +61,61 @@ namespace AnimationTest
                 Fill = new SolidColorBrush(Colors.Red)
             };
 
-            _sprite = new Sprite(item, new Position(100, 50));
-            _sprite.SetTargetPosition(new Position(200, 350));
+            _sprite = new Sprite(item, new Position(100, 500));
+            //_sprite.SetTargetPosition(new Position(200, 350));
             _sprite.AddToCanvas(MyCanvas);
-            AnzeigeKoordinaten();
-        }
+            _sprites.Add(_sprite);
 
-        private async void AnimateClick(object sender, RoutedEventArgs e)
-        {
-            int frames = 30;
-            for (int t = 1; t <= frames; t++)
+            item = new Rectangle()
             {
-                _sprite.ChangePositionOnTick(t, frames);
-                AnzeigeKoordinaten();
-                await System.Threading.Tasks.Task.Delay(16);
-            }
+                StrokeThickness = 5.0,
+                Height = 60,
+                Width = 60,
+                Stroke = new SolidColorBrush(Colors.Yellow),
+                Fill = new SolidColorBrush(Colors.Yellow)
+            };
+            _sprite = new Sprite(item, new Position(500, 250));
+            //_sprite.SetTargetPosition(new Position(500, 250));
+            _sprite.AddToCanvas(MyCanvas);
+            _sprites.Add(_sprite);
+            _batch.Start();
+        }
+
+        private /*async*/ void AnimateClick(object sender, RoutedEventArgs e)
+        {
+            Random r = new Random();
+            int x = r.Next(-100, +100);
+            int y = r.Next(-100, +100);
+            Position p0 = new Position(_sprites[0].CurrentPosition);
+            Position p1 = new Position(_sprites[1].CurrentPosition);
+            _sprites[0].SetStartPosition(p0);
+            _sprites[1].SetStartPosition(p1);
+            p0.Top += x;
+            p0.Left += y;
+            p1.Top += y;
+            p1.Left += x;
+            //tick = 0;
+            //timer.Start();
+            _batch.AddToBatch(_sprites[0], p0);
+            _batch.AddToBatch(_sprites[1], p1);
+
+            //for (int t = 1; t <= frames; t++)
+            //{
+            //    _sprite.ChangePositionOnTick(t, frames);
+            //    AnzeigeKoordinaten();
+            //    await System.Threading.Tasks.Task.Delay(16);
+            //}
 
         }
+
+        //private void Timer_Tick(object sender, object e)
+        //{
+        //    tick++;
+        //    foreach (Sprite item in _sprites)
+        //    {
+        //        item.ChangePositionOnTick(tick, frames);
+        //    }
+        //    if (tick >= frames) timer.Stop();
+        //}
     }
 }
