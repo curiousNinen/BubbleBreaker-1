@@ -17,6 +17,7 @@
             <Button Content="Sprite(s) bewegen" Click="AnimateClick" Margin="5"/>
             <TextBlock x:Name="Koordinaten" FontSize="20" Margin="5"/>
         </StackPanel>
+        
         <Canvas x:Name="MyCanvas" Grid.Row="1" Background="Blue" />
     </Grid>
 </Page>

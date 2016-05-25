@@ -30,6 +30,11 @@ namespace BubbleBreakerGfxLib
             Canvas.SetLeft(Itself, StartPosition.Left);
         }
 
+        public void MakeCurrentStart()
+        {
+            SetStartPosition(CurrentPosition);
+        }
+
         public void SetTargetPosition(Position topLeftTarget)
         {
             TargetPosition = new Position(topLeftTarget);

@@ -12,11 +12,11 @@ namespace BubbleBreakerLib
         public int Score { get; set; } = 0;             // aktueller Gesamt Score
         public int Zeilen { get; }         // Anzahl der Zeilen der Matrix
         public int Spalten { get; }        // Anzahl der Spalten der Matrix
-        public Zelle ZelleDerAdresse(int zeile, int spalte)
-            => Matrix[Math.Min(Math.Max(zeile, 0), Zeilen - 1), Math.Min(Math.Max(spalte, 0), Spalten - 1)];
+        public Zelle ZelleDerAdresse(int zeile, int spalte) => Matrix[Math.Min(Math.Max(zeile, 0), Zeilen - 1), Math.Min(Math.Max(spalte, 0), Spalten - 1)];
         public int Zuege { get; private set; }
-        public double BonusFaktor
-            => Zeilen * Spalten / Zuege * ((Matrix[Zeilen - 1, Spalten - 1].Leer) ? 2 : 1);
+        //public double BonusFaktor => Zeilen * Spalten / Zuege * ((Matrix[Zeilen - 1, Spalten - 1].Leer) ? 2 : 1);
+        public double BonusFaktor => (Matrix[Zeilen - 1, Spalten - 1].Leer) ? 2 : 1;
+
         public int GesamtScore => (int)(Score * BonusFaktor);
 
         // Private nicht sichtbare schnittstelle des Objekts

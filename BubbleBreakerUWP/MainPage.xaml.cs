@@ -44,13 +44,13 @@ namespace BubbleBreakerUWP
         private void PunktzahlAnzeigen()
         {
             Highscore = Math.Max(Highscore, SpielLogik.Score);
-            Punktzahl.Text = $"Zug: {SpielLogik.Zuege}  Punktzahl: {SpielLogik.Score}  Bonusfaktor: {SpielLogik.BonusFaktor} Highscore: {Highscore}";
+            Punktzahl.Text = $"Punktzahl: {SpielLogik.Score} Highscore: {Highscore}";
         }
 
         private void GesamtScoreAnzeigen()
         {
             Highscore = Math.Max(Highscore, SpielLogik.GesamtScore);
-            Punktzahl.Text = $"benötigte Züge: {SpielLogik.Zuege}  Punktzahl inkl. Bonusfaktor: {SpielLogik.GesamtScore}  Highscore: {Highscore}";
+            Punktzahl.Text = $"Punktzahl: {SpielLogik.GesamtScore}  Highscore: {Highscore}";
         }
 
         /// <summary>
@@ -102,9 +102,9 @@ namespace BubbleBreakerUWP
         {
             Position position = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
             int r = SpielLogik.FindeGleicheNachbarn(position);
-            SpielGfx.Animieren();
+            //SpielGfx.Animieren(); // funktioniert nicht richtig
             SpielLogik.EnferneAusgewaehlteBubbles();
-            //SpielGfx.BubblesAnzeigen();
+            SpielGfx.BubblesAnzeigen();
             SpielGfx.ZeigeZellFokus(position, true);
             PunktzahlAnzeigen();
 

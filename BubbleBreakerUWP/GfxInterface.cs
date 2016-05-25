@@ -21,7 +21,7 @@ namespace BubbleBreakerLib
         private Canvas _canvas;
         private GameMatrix _matrix;
         private Dictionary<BubbleFarbe, SolidColorBrush> _farben = new Dictionary<BubbleFarbe, SolidColorBrush>();
-        private Sprite[,] _bubbles;
+        //private Sprite[,] _bubbles;
         private UIElement _fokus;
         private Position _letzterFokus;
         private bool _fokusAn;
@@ -43,7 +43,7 @@ namespace BubbleBreakerLib
             _batch = new SpriteBatch();
             _batch.Start();
 
-            _bubbles = new Sprite[_zeilen, _spalten];
+            //_bubbles = new Sprite[_zeilen, _spalten];
 
             _farben[BubbleFarbe.Rot] = new SolidColorBrush(Colors.Red);
             _farben[BubbleFarbe.Gruen] = new SolidColorBrush(Colors.Green);
@@ -115,8 +115,10 @@ namespace BubbleBreakerLib
                     if (zelle.Belegt)
                     {
                         Position topLeft = TopLeftZellPosition(zeile, spalte);
-                        _bubbles[zeile, spalte] = new Sprite(ErzeugeBubble(zelle.Farbe), topLeft);
-                        _bubbles[zeile, spalte].AddToCanvas(_canvas);
+                        //_bubbles[zeile, spalte] = new Sprite(ErzeugeBubble(zelle.Farbe), topLeft);
+                        //_bubbles[zeile, spalte].AddToCanvas(_canvas);
+                        zelle.Behaelter = new Sprite(ErzeugeBubble(zelle.Farbe), topLeft);
+                        (zelle.Behaelter as Sprite).AddToCanvas(_canvas);
                     }
                 }
             }
@@ -220,7 +222,8 @@ namespace BubbleBreakerLib
                         zelle.BewegenSpalten = 0;
                         if (zelle.Ausgewaehlt)
                         {
-                            _bubbles[zelle.Zeile, zelle.Spalte].RemoveFromCanvas(_canvas);
+                            (zelle.Behaelter as Sprite).RemoveFromCanvas(_canvas);
+                            //_bubbles[zelle.Zeile, zelle.Spalte].RemoveFromCanvas(_canvas);
                             gewaehlt++;
                         }
                         if (zelle.Belegt)
@@ -237,11 +240,11 @@ namespace BubbleBreakerLib
 
             foreach (Zelle zelle in werdenBewegt)
             {
-                //if (zelle.BewegenZeilen != 0 && zelle.BewegenSpalten != 0)
-                //{
+                if (zelle.BewegenZeilen != 0 || zelle.BewegenSpalten != 0)
+                {
                     Position ziel = TopLeftZellPosition(zelle.Zeile + zelle.BewegenZeilen, zelle.Spalte + zelle.BewegenSpalten);
-                    _batch.AddToBatch(_bubbles[zelle.Zeile, zelle.Spalte], ziel);
-                //}
+                    _batch.AddToBatch((zelle.Behaelter as Sprite), ziel);
+                }
 
             }
 

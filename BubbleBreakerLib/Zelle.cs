@@ -18,6 +18,7 @@ namespace BubbleBreakerLib
         public bool Ausgewaehlt => Status == ZellStatus.Ausgewaehlt;
         public bool Belegt => Status == ZellStatus.Belegt;
         public bool Leer => Status == ZellStatus.Leer;
+        public object Behaelter { get; set; } = null; // Behaelter für Zusatzinfo/Sprite
 
         private Position _position;
         private Position _bewegung;
@@ -88,8 +89,10 @@ namespace BubbleBreakerLib
         {
             Farbe = zelle.Farbe;
             Status = zelle.Status;
+            Behaelter = Behaelter;
             _position = zelle._position;
             _bewegung = zelle._bewegung;
+            //_bewegung = new Position();
         }
 
         public string FarbRepraesentation()

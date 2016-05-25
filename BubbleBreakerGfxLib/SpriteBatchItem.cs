@@ -18,6 +18,7 @@ namespace BubbleBreakerGfxLib
         {
             _sprite = sprite;
             _frames = ReachInFrames;
+            _sprite.MakeCurrentStart();
             _sprite.SetTargetPosition(new Position(targetTopLeft));
             _tick = 0;
         }
