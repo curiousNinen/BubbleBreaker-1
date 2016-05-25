@@ -133,6 +133,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BubbleBreakerGfxLib\BubbleBreakerGfxLib.csproj">
+      <Project>{5D21836F-BBCE-4EC5-96B8-939750C292D5}</Project>
+      <Name>BubbleBreakerGfxLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BubbleBreakerLib\BubbleBreakerLib.csproj">
       <Project>{937be89c-76d2-4513-91a9-9c18a5f7e312}</Project>
       <Name>BubbleBreakerLib</Name>

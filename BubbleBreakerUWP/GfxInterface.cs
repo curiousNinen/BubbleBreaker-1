@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BubbleBreakerGfxLib;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,13 +21,13 @@ namespace BubbleBreakerLib
         private Canvas _canvas;
         private GameMatrix _matrix;
         private Dictionary<BubbleFarbe, SolidColorBrush> _farben = new Dictionary<BubbleFarbe, SolidColorBrush>();
-        private Ellipse[,] _bubbles;
-        //private Position[,] _vectoren;
+        private Sprite[,] _bubbles;
         private UIElement _fokus;
         private Position _letzterFokus;
         private bool _fokusAn;
         private int _zeilen => _matrix.Zeilen;
         private int _spalten => _matrix.Spalten;
+        private SpriteBatch _batch;
 
         public int ZellMass { get; private set; }
 
@@ -39,12 +40,10 @@ namespace BubbleBreakerLib
         {
             _canvas = canvas;
             _matrix = matrix;
-            _bubbles = new Ellipse[_zeilen, _spalten];
+            _batch = new SpriteBatch();
+            _batch.Start();
 
-            //_vectoren = new Position[_zeilen, _spalten];
-            //for (int i = 0; i < _zeilen; i++)
-            //    for (int j = 0; j < _spalten; j++)
-            //        _vectoren[i, j] = new Position();
+            _bubbles = new Sprite[_zeilen, _spalten];
 
             _farben[BubbleFarbe.Rot] = new SolidColorBrush(Colors.Red);
             _farben[BubbleFarbe.Gruen] = new SolidColorBrush(Colors.Green);
@@ -116,10 +115,8 @@ namespace BubbleBreakerLib
                     if (zelle.Belegt)
                     {
                         Position topLeft = TopLeftZellPosition(zeile, spalte);
-                        _bubbles[zeile, spalte] = ErzeugeBubble(zelle.Farbe);
-                        Canvas.SetTop(_bubbles[zeile, spalte], topLeft.Top);
-                        Canvas.SetLeft(_bubbles[zeile, spalte], topLeft.Left);
-                        _canvas.Children.Add(_bubbles[zeile, spalte]);
+                        _bubbles[zeile, spalte] = new Sprite(ErzeugeBubble(zelle.Farbe), topLeft);
+                        _bubbles[zeile, spalte].AddToCanvas(_canvas);
                     }
                 }
             }
@@ -205,60 +202,51 @@ namespace BubbleBreakerLib
             if (!belegt) FokusEinschalten(false);
         }
 
-        //public async void Animieren()
-        //{
-        //    for (int spalte = 0; spalte < _spalten; spalte++) // Spalten von Links nach rechts
-        //    {
-        //        // Feststellen der Spaltenvektoren
-        //        int gewaehlt = 0;
-        //        int belegt = 0;
-        //        for (int zeile = _zeilen - 1; zeile >= 0; zeile--)  // Zeilen von unten nach oben
-        //        {
-        //            _vectoren[zeile, spalte].Zeile = gewaehlt;
-        //            _vectoren[zeile, spalte].Spalte = 0;
-        //            Zelle zelle = _matrix.ZelleDerAdresse(zeile, spalte);
-        //            if (zelle.Ausgewaehlt) gewaehlt++;
-        //            if (zelle.Belegt) belegt++;
-        //        }
-        //        if (gewaehlt > 0) // Nur ausführen wenn tatsächlich was zu animieren ist
-        //        {
-        //            if (belegt == 0) // Ausführen, falls die spalte leer wird, --> shift links
-        //            {
-        //                for (int i = 0; i < spalte; i++)
-        //                {
-        //                    for (int j = 0; j < _zeilen; j++)
-        //                    {
-        //                        _vectoren[j, i].Spalte++;
-        //                    }
-        //                }
-        //            }
+        public void Animieren()
+        {
+            List<Zelle> werdenBewegt = new List<Zelle>();
 
-        //        }
+            for (int spalte = 0; spalte < _spalten; spalte++) // Spalten von Links nach rechts
+            {
+                // Feststellen der Spaltenvektoren
+                int gewaehlt = 0; // wieviele bubble sind ausgweählt?
+                int belegt = 0; // wieviele bubble sind belegt?
+                for (int zeile = _zeilen - 1; zeile >= 0; zeile--)  // Zeilen von unten nach oben durchgehen
+                {
+                    Zelle zelle = _matrix.ZelleDerAdresse(zeile, spalte);
+                    if (!zelle.Leer)
+                    {
+                        zelle.BewegenZeilen = gewaehlt;
+                        zelle.BewegenSpalten = 0;
+                        if (zelle.Ausgewaehlt)
+                        {
+                            _bubbles[zelle.Zeile, zelle.Spalte].RemoveFromCanvas(_canvas);
+                            gewaehlt++;
+                        }
+                        if (zelle.Belegt)
+                        {
+                            belegt++;
+                            werdenBewegt.Add(zelle);
+                        }
+                    }
+                }
+                if (gewaehlt > 0 && belegt == 0) // Nur ausführen wenn tatsächlich Spalten verschoben werden müssen
+                    foreach (Zelle zelle in werdenBewegt)
+                        zelle.BewegenSpalten++;
+            }
 
-        //    }
+            foreach (Zelle zelle in werdenBewegt)
+            {
+                //if (zelle.BewegenZeilen != 0 && zelle.BewegenSpalten != 0)
+                //{
+                    Position ziel = TopLeftZellPosition(zelle.Zeile + zelle.BewegenZeilen, zelle.Spalte + zelle.BewegenSpalten);
+                    _batch.AddToBatch(_bubbles[zelle.Zeile, zelle.Spalte], ziel);
+                //}
 
-        //    // animation
-        //    for (int a = 0; a < 10; a++)
-        //    {
-        //        for (int zeile = 0; zeile < _zeilen; zeile++)
-        //        {
-        //            for (int spalte = 0; spalte < _spalten; spalte++)
-        //            {
-        //                //if (_matrix.ZelleDerAdresse(zeile, spalte).Belegt)
-        //                //{
+            }
 
-        //                    Ellipse bubble = _bubbles[zeile, spalte];
-        //                    double z = Canvas.GetTop(bubble) + _vectoren[zeile, spalte].Zeile * 0.2 * ZellMass;
-        //                    double s = Canvas.GetLeft(bubble) + _vectoren[zeile, spalte].Spalte * 0.2 * ZellMass;
-        //                    Canvas.SetTop(bubble, z);
-        //                    Canvas.SetLeft(bubble, s);
-        //                //}
-
-        //            }
-        //        }
-        //        await Task.Delay(300);
-        //    }
-        //}
+            //_batch.Animate();
+        }
 
     }
 }
