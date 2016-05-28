@@ -27,7 +27,7 @@ namespace BubbleBreakerGfxLib
 
         public void AddToBatch(Sprite sprite, Position targetTopLeft)
         {
-            SpriteBatchItem item = new SpriteBatchItem(sprite, targetTopLeft, 15);
+            SpriteBatchItem item = new SpriteBatchItem(ref sprite, targetTopLeft, 15);
             batch.Add(item);
         }
 
@@ -37,7 +37,9 @@ namespace BubbleBreakerGfxLib
             foreach (var sprite in batch)
             {
                 if (sprite.ReachedTarget)
+                {
                     reachedTargets.Add(batch.IndexOf(sprite));
+                }
                 else
                     sprite.Animate();
             }

@@ -69,6 +69,7 @@ namespace BubbleBreakerLib
         public void Löschen()
         {
             FarbeFestlegen(BubbleFarbe.Leer);
+            Behaelter = null;
         }
 
         /// <summary>
@@ -90,8 +91,8 @@ namespace BubbleBreakerLib
             Farbe = zelle.Farbe;
             Status = zelle.Status;
             Behaelter = Behaelter;
-            _position = zelle._position;
-            _bewegung = zelle._bewegung;
+            //_position = new Position(zelle._position);
+            //_bewegung = new Position(zelle._bewegung);
             //_bewegung = new Position();
         }
 

@@ -11,62 +11,55 @@ namespace BubbleBreakerGfxLib
 {
     public class Sprite
     {
-        public Position StartPosition { get; private set; }
-        public Position CurrentPosition { get; private set; }
-        public Position TargetPosition { get; private set; }
-        public UIElement Itself { get; private set; }
+        public UIElement Element { get; }
+        public Position TopLeft => new Position((int)(Canvas.GetTop(Element)), (int)(Canvas.GetLeft(Element)));
+        private bool _inCanvas;
 
-        public Sprite(UIElement sprite, Position topLeftStart)
+        public Sprite(UIElement sprite, Position topLeft)
         {
-            Itself = sprite;
-            SetStartPosition(topLeftStart);
+            Element = sprite;
+            _inCanvas = false;
+            SetTopLeft(topLeft);
         }
 
-        public void SetStartPosition(Position topLeftStart)
+        public void SetTopLeft(double top, double left)
         {
-            StartPosition = new Position(topLeftStart);
-            CurrentPosition = new Position(StartPosition);
-            Canvas.SetTop(Itself, StartPosition.Top);
-            Canvas.SetLeft(Itself, StartPosition.Left);
+            Canvas.SetTop(Element, top);
+            Canvas.SetLeft(Element, left);
         }
 
-        public void MakeCurrentStart()
+        public void SetTopLeft(Position topLeft)
         {
-            SetStartPosition(CurrentPosition);
+            Canvas.SetTop(Element, topLeft.Top);
+            Canvas.SetLeft(Element, topLeft.Left);
         }
 
-        public void SetTargetPosition(Position topLeftTarget)
+        public void MoveBy(double top, double left)
         {
-            TargetPosition = new Position(topLeftTarget);
-        }
-
-        public void ChangeSprite(UIElement sprite)
-        {
-            Itself = sprite;
-            Canvas.SetTop(Itself, CurrentPosition.Top);
-            Canvas.SetLeft(Itself, CurrentPosition.Left);
-        }
-
-        public void ChangePositionOnTick(double tick, double frames)
-        {
-            if (StartPosition.Equals(TargetPosition)) return;
-            double coeff = tick / frames;
-            double top = (StartPosition.Top + (TargetPosition.Top - StartPosition.Top) * coeff);
-            double left = (StartPosition.Left + (TargetPosition.Left - StartPosition.Left) * coeff);
-            CurrentPosition.Top = (int)top;
-            CurrentPosition.Left = (int)left;
-            Canvas.SetTop(Itself, CurrentPosition.Top);
-            Canvas.SetLeft(Itself, CurrentPosition.Left);
+            Position topLeft = TopLeft;
+            topLeft.Top += (int)top;
+            topLeft.Left += (int)left;
+            SetTopLeft(topLeft);
         }
 
         public void AddToCanvas(Canvas canvas)
         {
-            canvas.Children.Add(Itself);
+            if (!_inCanvas)
+            {
+                canvas.Children.Add(Element);
+                _inCanvas = true;
+
+            }
         }
 
         public void RemoveFromCanvas(Canvas canvas)
         {
-            canvas.Children.Remove(Itself);
+            if (_inCanvas)
+            {
+                canvas.Children.Remove(Element);
+                _inCanvas = false;
+
+            }
         }
     }
 }

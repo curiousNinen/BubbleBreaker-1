@@ -21,13 +21,31 @@ namespace BubbleBreakerLib
         private Canvas _canvas;
         private GameMatrix _matrix;
         private Dictionary<BubbleFarbe, SolidColorBrush> _farben = new Dictionary<BubbleFarbe, SolidColorBrush>();
-        //private Sprite[,] _bubbles;
-        private UIElement _fokus;
+        private Sprite _fokus;
         private Position _letzterFokus;
         private bool _fokusAn;
         private int _zeilen => _matrix.Zeilen;
         private int _spalten => _matrix.Spalten;
         private SpriteBatch _batch;
+
+        private string _debugOut;
+        public string DebugOut => _debugOut;
+
+        public void ClearDebugInfo()
+        {
+#if DEBUG
+            _debugOut = "";
+#endif
+        }
+
+        private void DebugWrite(string s = "", bool newLine = true)
+        {
+#if DEBUG
+            _debugOut += s;
+            if (newLine) _debugOut += Environment.NewLine;
+#endif
+        }
+
 
         public int ZellMass { get; private set; }
 
@@ -40,23 +58,59 @@ namespace BubbleBreakerLib
         {
             _canvas = canvas;
             _matrix = matrix;
+
+            ZellMass = PlatzProZelle();
+
             _batch = new SpriteBatch();
             _batch.Start();
-
-            //_bubbles = new Sprite[_zeilen, _spalten];
 
             _farben[BubbleFarbe.Rot] = new SolidColorBrush(Colors.Red);
             _farben[BubbleFarbe.Gruen] = new SolidColorBrush(Colors.Green);
             _farben[BubbleFarbe.Blau] = new SolidColorBrush(Colors.Blue);
             _farben[BubbleFarbe.Violett] = new SolidColorBrush(Colors.Purple);
 
-            ZellMass = PlatzProZelle();
 
             _letzterFokus = new Position(-1, -1);
 
-            _fokus = ErzeugeFokusObjekt();
+            _fokus = new Sprite(ErzeugeFokusObjekt(), new Position());
             _fokusAn = false;
 
+            _debugOut = "";
+
+        }
+
+        public string MatrixAusgeben()
+        {
+            string result = "";
+            string crlf = Environment.NewLine;
+
+            string Zeile = "";
+
+            for (int i = 0; i < _matrix.Zeilen; i++) // Zeilen
+            {
+                Zeile = $"Z{i}: ";
+                for (int j = 0; j < _matrix.Spalten; j++)
+                {
+                    Zelle zelle = _matrix.ZelleDerAdresse(i, j);
+                    Sprite sprite = zelle.Behaelter as Sprite;
+                    Position pos;
+                    if (sprite != null)
+                    {
+                        Ellipse item = sprite.Element as Ellipse;
+                        double z = Canvas.GetTop(item);//Zeile
+                        double s = Canvas.GetLeft(item);//Spalte
+                        pos = new Position((int)z, (int)s);
+                    }
+                    else pos = new Position();
+                    //Zeile += $"|{zelle.FarbRepraesentation()}, {zelle.Zeile},{zelle.Spalte}, {pos.ToString()}|";
+                    Zeile += $"|{zelle.FarbRepraesentation()}, {pos.ToString()}|";
+
+                }
+                Zeile += crlf;
+                result += Zeile;
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -115,13 +169,14 @@ namespace BubbleBreakerLib
                     if (zelle.Belegt)
                     {
                         Position topLeft = TopLeftZellPosition(zeile, spalte);
-                        //_bubbles[zeile, spalte] = new Sprite(ErzeugeBubble(zelle.Farbe), topLeft);
-                        //_bubbles[zeile, spalte].AddToCanvas(_canvas);
                         zelle.Behaelter = new Sprite(ErzeugeBubble(zelle.Farbe), topLeft);
                         (zelle.Behaelter as Sprite).AddToCanvas(_canvas);
                     }
                 }
             }
+            ClearDebugInfo();
+            DebugWrite("BubblesAnzeigen:");
+            DebugWrite(MatrixAusgeben());
         }
 
         /// <summary>
@@ -174,12 +229,12 @@ namespace BubbleBreakerLib
         {
             if (!_fokusAn && einschalten)
             {
-                _canvas.Children.Add(_fokus);
+                _fokus.AddToCanvas(_canvas);
                 _fokusAn = einschalten;
             }
             if (_fokusAn && !einschalten)
             {
-                _canvas.Children.Remove(_fokus);
+                _fokus.RemoveFromCanvas(_canvas);
                 _fokusAn = einschalten;
             }
         }
@@ -196,8 +251,7 @@ namespace BubbleBreakerLib
             bool belegt = OutOfBounds(fokus) ? false : _matrix.ZelleDerAdresse(fokus.Zeile, fokus.Spalte).Belegt;
 
             Position topLeft = TopLeftZellPosition(fokus.Zeile, fokus.Spalte, 0);
-            Canvas.SetTop(_fokus, topLeft.Top);
-            Canvas.SetLeft(_fokus, topLeft.Left);
+            _fokus.SetTopLeft(topLeft);
 
             FokusEinschalten(true);
             _letzterFokus = fokus;
@@ -223,7 +277,6 @@ namespace BubbleBreakerLib
                         if (zelle.Ausgewaehlt)
                         {
                             (zelle.Behaelter as Sprite).RemoveFromCanvas(_canvas);
-                            //_bubbles[zelle.Zeile, zelle.Spalte].RemoveFromCanvas(_canvas);
                             gewaehlt++;
                         }
                         if (zelle.Belegt)
@@ -235,20 +288,31 @@ namespace BubbleBreakerLib
                 }
                 if (gewaehlt > 0 && belegt == 0) // Nur ausführen wenn tatsächlich Spalten verschoben werden müssen
                     foreach (Zelle zelle in werdenBewegt)
+                    {
                         zelle.BewegenSpalten++;
+                    }
             }
+
+            ClearDebugInfo();
+            DebugWrite("bewegung!:");
 
             foreach (Zelle zelle in werdenBewegt)
             {
                 if (zelle.BewegenZeilen != 0 || zelle.BewegenSpalten != 0)
                 {
+                    Sprite sprite = zelle.Behaelter as Sprite;
+                    Position pos = sprite.TopLeft;
                     Position ziel = TopLeftZellPosition(zelle.Zeile + zelle.BewegenZeilen, zelle.Spalte + zelle.BewegenSpalten);
-                    _batch.AddToBatch((zelle.Behaelter as Sprite), ziel);
+
+                    DebugWrite($"Z{zelle.Zeile},S{zelle.Spalte} --> {zelle.BewegenZeilen},{zelle.BewegenSpalten} == ", false);
+                    DebugWrite($"Start: Current: {pos.ToString()}  Ziel: {ziel.ToString()}");
+                    DebugWrite();
+
+                    _batch.AddToBatch(sprite, ziel);
                 }
 
             }
 
-            //_batch.Animate();
         }
 
     }

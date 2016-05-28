@@ -44,6 +44,6 @@ namespace BubbleBreakerLib
             return base.GetHashCode();
         }
 
-
+        public override string ToString() => $"{_zeile},{_spalte}";
     }
 }

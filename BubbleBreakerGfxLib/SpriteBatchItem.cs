@@ -10,23 +10,30 @@ namespace BubbleBreakerGfxLib
 {
     public class SpriteBatchItem
     {
-        public bool ReachedTarget => _sprite.TargetPosition.Equals(_sprite.CurrentPosition);
         private int _tick;
         private int _frames;
+        private double _movementZ;
+        private double _movementS; 
         private Sprite _sprite;
-        public SpriteBatchItem(Sprite sprite, Position targetTopLeft, int ReachInFrames)
+        private Position _moveToTopLeft;
+
+        public bool ReachedTarget => _moveToTopLeft.Equals(_sprite.TopLeft);
+
+        public SpriteBatchItem(ref Sprite sprite, Position moveToTopLeft, int reachInFrames)
         {
             _sprite = sprite;
-            _frames = ReachInFrames;
-            _sprite.MakeCurrentStart();
-            _sprite.SetTargetPosition(new Position(targetTopLeft));
+            _frames = reachInFrames;
+            _moveToTopLeft = moveToTopLeft;
+           _movementZ = (_moveToTopLeft.Top - _sprite.TopLeft.Top) / _frames;
+            _movementS = (_moveToTopLeft.Left - _sprite.TopLeft.Left) / _frames;
             _tick = 0;
         }
 
         public void Animate()
         {
             _tick++;
-            _sprite.ChangePositionOnTick(_tick, _frames);
+            if (ReachedTarget) return;
+            _sprite.MoveBy((int)_movementZ, (int)_movementS);
         }
     }
 }

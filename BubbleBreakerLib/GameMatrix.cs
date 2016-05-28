@@ -32,9 +32,9 @@ namespace BubbleBreakerLib
             Zeilen = zeilen;
             Spalten = spalten;
             Matrix = new Zelle[Zeilen, Spalten];
-            for (int zeile = 0; zeile < Zeilen; zeile++)
-                for (int spalte = 0; spalte < Spalten; spalte++)
-                    Matrix[zeile, spalte] = new Zelle(zeile, spalte);
+            //for (int zeile = 0; zeile < Zeilen; zeile++)
+            //    for (int spalte = 0; spalte < Spalten; spalte++)
+            //        Matrix[zeile, spalte] = new Zelle(zeile, spalte);
         }
 
         /// <summary>
@@ -48,6 +48,7 @@ namespace BubbleBreakerLib
             for (int zeile = 0; zeile < Zeilen; zeile++)
                 for (int spalte = 0; spalte < Spalten; spalte++)
                 {
+                    Matrix[zeile, spalte] = new Zelle(zeile, spalte);
                     BubbleFarbe farbe = (BubbleFarbe)rnd.Next(1, 5);
                     Matrix[zeile, spalte].FarbeFestlegen(farbe);
                 }

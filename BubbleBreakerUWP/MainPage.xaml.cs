@@ -101,9 +101,19 @@ namespace BubbleBreakerUWP
         private void MyCanvas_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
             Position position = SpielGfx.ZellAdresseBerechnen(e.GetCurrentPoint(MyCanvas).Position);
+
             int r = SpielLogik.FindeGleicheNachbarn(position);
+
+            Debug.Text = SpielGfx.MatrixAusgeben();
+
             //SpielGfx.Animieren(); // funktioniert nicht richtig
+
+            //Debug.Text += Environment.NewLine + SpielGfx.DebugOut;
+
             SpielLogik.EnferneAusgewaehlteBubbles();
+
+            //Debug.Text += Environment.NewLine + SpielGfx.MatrixAusgeben();
+
             SpielGfx.BubblesAnzeigen();
             SpielGfx.ZeigeZellFokus(position, true);
             PunktzahlAnzeigen();
