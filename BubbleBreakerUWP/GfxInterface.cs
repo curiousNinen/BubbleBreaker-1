@@ -161,18 +161,40 @@ namespace BubbleBreakerLib
         {
             _canvas.Children.Clear();
             _fokusAn = false; // muss ausgeschaltet werden, da alle Grafikobjekte des Canvas mit .Clear gelöscht wurden
-            for (int zeile = 0; zeile < _zeilen; zeile++)
+                              //for (int zeile = 0; zeile < _zeilen; zeile++)
+                              //{
+                              //    for (int spalte = 0; spalte < _spalten; spalte++)
+                              //    {
+                              //        Zelle zelle = _matrix.ZelleDerAdresse(zeile, spalte);
+                              //        if (zelle.Belegt)
+                              //        {
+                              //            Position topLeft = TopLeftZellPosition(zeile, spalte);
+                              //            zelle.Behaelter = new Sprite(ErzeugeBubble(zelle.Farbe), topLeft);
+                              //            (zelle.Behaelter as Sprite).AddToCanvas(_canvas);
+                              //        }
+                              //    }
+                              //}
+            for (int spalte = _spalten - 1; spalte >= 0; spalte--)
             {
-                for (int spalte = 0; spalte < _spalten; spalte++)
+                Zelle zelle = _matrix.ZelleDerAdresse(_zeilen - 1, spalte);
+                if (zelle.Belegt)
                 {
-                    Zelle zelle = _matrix.ZelleDerAdresse(zeile, spalte);
-                    if (zelle.Belegt)
+                    int zeile = _zeilen - 1;
+                    bool fortfahren = true;
+                    while (zeile >= 0 && fortfahren)
                     {
-                        Position topLeft = TopLeftZellPosition(zeile, spalte);
-                        zelle.Behaelter = new Sprite(ErzeugeBubble(zelle.Farbe), topLeft);
-                        (zelle.Behaelter as Sprite).AddToCanvas(_canvas);
+                        zelle = _matrix.ZelleDerAdresse(zeile, spalte);
+                        if (zelle.Belegt)
+                        {
+                            Position topLeft = TopLeftZellPosition(zeile, spalte);
+                            zelle.Behaelter = new Sprite(ErzeugeBubble(zelle.Farbe), topLeft);
+                            (zelle.Behaelter as Sprite).AddToCanvas(_canvas);
+                        }
+                        else fortfahren = false;
+                        zeile--;
                     }
                 }
+                else break;
             }
             ClearDebugInfo();
             DebugWrite("BubblesAnzeigen:");
