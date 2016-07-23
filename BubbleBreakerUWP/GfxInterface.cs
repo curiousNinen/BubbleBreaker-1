@@ -159,27 +159,35 @@ namespace BubbleBreakerLib
         /// </summary>
         public void BubblesAnzeigen()
         {
+            ClearDebugInfo();
             _canvas.Children.Clear();
             _fokusAn = false; // muss ausgeschaltet werden, da alle Grafikobjekte des Canvas mit .Clear gelöscht wurden
-                              //for (int zeile = 0; zeile < _zeilen; zeile++)
-                              //{
-                              //    for (int spalte = 0; spalte < _spalten; spalte++)
-                              //    {
-                              //        Zelle zelle = _matrix.ZelleDerAdresse(zeile, spalte);
-                              //        if (zelle.Belegt)
-                              //        {
-                              //            Position topLeft = TopLeftZellPosition(zeile, spalte);
-                              //            zelle.Behaelter = new Sprite(ErzeugeBubble(zelle.Farbe), topLeft);
-                              //            (zelle.Behaelter as Sprite).AddToCanvas(_canvas);
-                              //        }
-                              //    }
-                              //}
+
+            //for (int zeile = 0; zeile < _zeilen; zeile++)
+            //{
+            //    for (int spalte = 0; spalte < _spalten; spalte++)
+            //    {
+            //        Zelle zelle = _matrix.ZelleDerAdresse(zeile, spalte);
+            //        if (zelle.Belegt)
+            //        {
+            //            Position topLeft = TopLeftZellPosition(zeile, spalte);
+            //            zelle.Behaelter = new Sprite(ErzeugeBubble(zelle.Farbe), topLeft);
+            //            (zelle.Behaelter as Sprite).AddToCanvas(_canvas);
+            //        }
+            //    }
+            //}
+
             for (int spalte = _spalten - 1; spalte >= 0; spalte--)
             {
                 Zelle zelle = _matrix.ZelleDerAdresse(_zeilen - 1, spalte);
-                if (zelle.Belegt)
+                int zeile = _zeilen - 1;
+                if (zelle.Leer)
                 {
-                    int zeile = _zeilen - 1;
+                    DebugWrite($"Break at spalte={spalte}");
+                    break;
+                }
+                else
+                {
                     bool fortfahren = true;
                     while (zeile >= 0 && fortfahren)
                     {
@@ -194,11 +202,9 @@ namespace BubbleBreakerLib
                         zeile--;
                     }
                 }
-                else break;
             }
-            ClearDebugInfo();
-            DebugWrite("BubblesAnzeigen:");
-            DebugWrite(MatrixAusgeben());
+            //DebugWrite("BubblesAnzeigen:");
+            //DebugWrite(MatrixAusgeben());
         }
 
         /// <summary>

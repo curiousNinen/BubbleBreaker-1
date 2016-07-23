@@ -104,7 +104,7 @@ namespace BubbleBreakerUWP
 
             int r = SpielLogik.FindeGleicheNachbarn(position);
 
-            Debug.Text = SpielGfx.MatrixAusgeben();
+            //Debug.Text = SpielGfx.MatrixAusgeben();
 
             //SpielGfx.Animieren(); // funktioniert nicht richtig
 
@@ -115,7 +115,11 @@ namespace BubbleBreakerUWP
             //Debug.Text += Environment.NewLine + SpielGfx.MatrixAusgeben();
 
             SpielGfx.BubblesAnzeigen();
+
+            Debug.Text += SpielGfx.DebugOut;
+
             SpielGfx.ZeigeZellFokus(position, true);
+
             PunktzahlAnzeigen();
 
             if (!SpielLogik.EsGibtGleicheNachbarnUndMatrixIstNichtLeer())
