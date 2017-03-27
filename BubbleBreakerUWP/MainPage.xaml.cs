@@ -17,6 +17,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
+using Microsoft.Xbox.Services;
+using Microsoft.Xbox.Services.System;
+using Microsoft.Xbox.Services.Social;
+using Microsoft.Xbox.Services.Social.Manager;
 using BubbleBreakerLib;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
@@ -91,6 +95,40 @@ namespace BubbleBreakerUWP
                 MyCanvas.PointerPressed -= MyCanvas_PointerPressed;
                 StartMsg.Visibility = Visibility.Visible;
             }
+        }
+
+        /// <summary>
+        /// Keep try or dying
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            XboxLiveUser user = new XboxLiveUser();
+            await user.SignInSilentlyAsync();
+
+            if (user.IsSignedIn)
+            {
+
+                XboxLiveContext context = new XboxLiveContext(user);
+
+                PeopleHubService peoplehub = new PeopleHubService(context.Settings, context.AppConfig);
+                XboxSocialUser socialuser = await peoplehub.GetProfileInfo(user, SocialManagerExtraDetailLevel.None);
+
+            }
+                //var x = socialuser.Gamerscore;
+                
+             
+                //string information = $"My Xbox User Id is {user.XboxUserId}. My Web account Id is {user.WebAccountId} and my gamertag is {user.Gamertag}";
+                //var mDlg = new Windows.UI.Popups.MessageDialog(information, "Yes Sir!");
+                //await mDlg.ShowAsync();
+                //ISocialManager manager = SocialManager.Instance;
+                //await manager.AddLocalUser(user, SocialManagerExtraDetailLevel.None);
+
+
+              
+                
+
         }
     }
 }

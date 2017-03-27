@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="44234MrZweistein.BubbleBreaker2D" Publisher="CN=46B1A889-E28A-4D64-BED7-271AC99ECB48" Version="1.1.1.0" />
-  <mp:PhoneIdentity PhoneProductId="bbd9df36-ac88-4596-afe5-3077525850f7" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
+  <Identity Name="44234MrZweistein.BubbleBreaker2D" Publisher="CN=46B1A889-E28A-4D64-BED7-271AC99ECB48" Version="1.1.0.0" />
+  <mp:PhoneIdentity PhoneProductId="58d6a131-cadb-437a-b444-9822537eb83d" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>BubbleBreaker2D</DisplayName>
     <PublisherDisplayName>Zweistein Solutions</PublisherDisplayName>
@@ -14,8 +14,8 @@
     <Resource Language="x-generate" />
   </Resources>
   <Applications>
-    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="BubbleBreakerUWP.App">
-      <uap:VisualElements DisplayName="BubbleBreaker2D" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="BubbleBreakerUWP" BackgroundColor="transparent">
+    <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="BubbleBreakerCpp.App">
+      <uap:VisualElements DisplayName="BubbleBreaker2D" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\Square44x44Logo.png" Description="BubbleBreakerCpp" BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png">
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
