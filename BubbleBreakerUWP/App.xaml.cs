@@ -30,7 +30,18 @@ namespace BubbleBreakerUWP
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            //this.Init();
         }
+
+        //private static Boolean _lock = true;
+        //private async void Init()
+        //{
+        //    if (!await XboxLiveManager.InititializeAsync())
+        //    {
+
+        //    }
+        //    _lock = false;
+        //}
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
@@ -72,6 +83,15 @@ namespace BubbleBreakerUWP
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
+
+                //// Warten auf die Initialisierung
+                ////int ms = 0;
+                //while (_lock)
+                //{
+                //    //ms++;
+                //    await System.Threading.Tasks.Task.Delay(50);
+                //}
+
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }
             // Ensure the current window is active

@@ -17,6 +17,7 @@
             <Button Content="Anmelden Xbox Live" Click="Button_Click_1" Margin="5"/>
             <TextBlock x:Name="Punktzahl" FontSize="20" Margin="5"/>
         </StackPanel>
+        <Image x:Name="GamerPic" Width="80" Height="80" HorizontalAlignment="Right"/>
         <Canvas x:Name="MyCanvas" Grid.Row="1" Height="500" Width="500" Background="#FFFBF45C" />
         <TextBlock x:Name="StartMsg" Grid.Row="1" FontSize="50" Text="Spiel neu starten?" HorizontalAlignment="Center" VerticalAlignment="Center" />
     </Grid>

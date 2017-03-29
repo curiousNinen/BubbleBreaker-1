@@ -245,3 +245,6 @@ ModelManifest.xml
 .fake/
 /BubbleBreaker2D.XboxLiveServices.Data.txt
 /BubbleBreaker2D.XboxLiveServices.Data.txt
+/Saves
+/Saves/SwitchToRetail.cmd
+/Saves/SwitchToSandbox.cmd

@@ -22,6 +22,7 @@ using Microsoft.Xbox.Services.System;
 using Microsoft.Xbox.Services.Social;
 using Microsoft.Xbox.Services.Social.Manager;
 using BubbleBreakerLib;
+using Windows.UI.Xaml.Media.Imaging;
 
 // The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -39,7 +40,17 @@ namespace BubbleBreakerUWP
         public MainPage()
         {
             this.InitializeComponent();
+
+        }
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            if (!await XboxLiveManager.InititializeAsync())
+            {
+
+            }
             Highscore = 0;
+            GamerPic.Source = XboxLiveManager.GamerPic;
         }
 
         /// <summary>
@@ -104,31 +115,35 @@ namespace BubbleBreakerUWP
         /// <param name="e"></param>
         private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            XboxLiveUser user = new XboxLiveUser();
-            await user.SignInSilentlyAsync();
+            //XboxLiveUser user = new XboxLiveUser();
+            //await user.SignInSilentlyAsync();
 
-            if (user.IsSignedIn)
-            {
+            //if (user.IsSignedIn)
+            //{
 
-                XboxLiveContext context = new XboxLiveContext(user);
+            //    XboxLiveContext context = new XboxLiveContext(user);
 
-                PeopleHubService peoplehub = new PeopleHubService(context.Settings, context.AppConfig);
-                XboxSocialUser socialuser = await peoplehub.GetProfileInfo(user, SocialManagerExtraDetailLevel.None);
+            //    PeopleHubService peoplehub = new PeopleHubService(context.Settings, context.AppConfig);
+            //    XboxSocialUser socialuser = await peoplehub.GetProfileInfo(user, SocialManagerExtraDetailLevel.None);
 
-            }
-                //var x = socialuser.Gamerscore;
-                
-             
-                //string information = $"My Xbox User Id is {user.XboxUserId}. My Web account Id is {user.WebAccountId} and my gamertag is {user.Gamertag}";
-                //var mDlg = new Windows.UI.Popups.MessageDialog(information, "Yes Sir!");
-                //await mDlg.ShowAsync();
-                //ISocialManager manager = SocialManager.Instance;
-                //await manager.AddLocalUser(user, SocialManagerExtraDetailLevel.None);
+            //    GamerPic.Source = new BitmapImage(new Uri(socialuser.DisplayPicRaw));
 
 
-              
-                
+            //}
+            ////var x = socialuser.Gamerscore;
+
+
+            ////string information = $"My Xbox User Id is {user.XboxUserId}. My Web account Id is {user.WebAccountId} and my gamertag is {user.Gamertag}";
+            ////var mDlg = new Windows.UI.Popups.MessageDialog(information, "Yes Sir!");
+            ////await mDlg.ShowAsync();
+            ////ISocialManager manager = SocialManager.Instance;
+            ////await manager.AddLocalUser(user, SocialManagerExtraDetailLevel.None);
+
+
+
+
 
         }
+
     }
 }
