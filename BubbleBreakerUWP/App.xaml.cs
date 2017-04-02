@@ -7,6 +7,8 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Display;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -30,25 +32,14 @@ namespace BubbleBreakerUWP
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            //this.Init();
         }
-
-        //private static Boolean _lock = true;
-        //private async void Init()
-        //{
-        //    if (!await XboxLiveManager.InititializeAsync())
-        //    {
-
-        //    }
-        //    _lock = false;
-        //}
 
         /// <summary>
         /// Invoked when the application is launched normally by the end user.  Other entry points
         /// will be used such as when the application is launched to open a specific file.
         /// </summary>
         /// <param name="e">Details about the launch request and process.</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override async void OnLaunched(LaunchActivatedEventArgs e)
         {
 
 #if DEBUG
@@ -58,6 +49,13 @@ namespace BubbleBreakerUWP
             //}
 #endif
 
+            if (!await XboxLiveManager.InititializeAsync())
+            {
+                var msg = new MessageDialog("Ohne erfolgreiche Anmeldung kann das Spiel nicht gespielt werden");
+                await msg.ShowAsync();
+                App.Current.Exit();
+            }
+
             Frame rootFrame = Window.Current.Content as Frame;
 
             // Do not repeat app initialization when the Window already has content,
@@ -66,6 +64,11 @@ namespace BubbleBreakerUWP
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
+
+
+
+                rootFrame.MaxHeight = EffectivePixels.Height;
+                rootFrame.MaxWidth = 600;
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
@@ -83,14 +86,6 @@ namespace BubbleBreakerUWP
                 // When the navigation stack isn't restored navigate to the first page,
                 // configuring the new page by passing required information as a navigation
                 // parameter
-
-                //// Warten auf die Initialisierung
-                ////int ms = 0;
-                //while (_lock)
-                //{
-                //    //ms++;
-                //    await System.Threading.Tasks.Task.Delay(50);
-                //}
 
                 rootFrame.Navigate(typeof(MainPage), e.Arguments);
             }

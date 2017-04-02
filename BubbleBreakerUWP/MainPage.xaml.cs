@@ -40,15 +40,19 @@ namespace BubbleBreakerUWP
         public MainPage()
         {
             this.InitializeComponent();
+            //this.MaxHeight = 800;
+            //this.MaxWidth = 600;
+            //this.MinHeight = 800;
+            //this.MaxHeight = 600;
 
         }
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        protected override /*async*/ void OnNavigatedTo(NavigationEventArgs e)
         {
-            if (!await XboxLiveManager.InititializeAsync())
-            {
+            //if (!await XboxLiveManager.InititializeAsync())
+            //{
 
-            }
+            //}
             Highscore = 0;
             GamerPic.Source = XboxLiveManager.GamerPic;
         }
@@ -106,43 +110,6 @@ namespace BubbleBreakerUWP
                 MyCanvas.PointerPressed -= MyCanvas_PointerPressed;
                 StartMsg.Visibility = Visibility.Visible;
             }
-        }
-
-        /// <summary>
-        /// Keep try or dying
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            //XboxLiveUser user = new XboxLiveUser();
-            //await user.SignInSilentlyAsync();
-
-            //if (user.IsSignedIn)
-            //{
-
-            //    XboxLiveContext context = new XboxLiveContext(user);
-
-            //    PeopleHubService peoplehub = new PeopleHubService(context.Settings, context.AppConfig);
-            //    XboxSocialUser socialuser = await peoplehub.GetProfileInfo(user, SocialManagerExtraDetailLevel.None);
-
-            //    GamerPic.Source = new BitmapImage(new Uri(socialuser.DisplayPicRaw));
-
-
-            //}
-            ////var x = socialuser.Gamerscore;
-
-
-            ////string information = $"My Xbox User Id is {user.XboxUserId}. My Web account Id is {user.WebAccountId} and my gamertag is {user.Gamertag}";
-            ////var mDlg = new Windows.UI.Popups.MessageDialog(information, "Yes Sir!");
-            ////await mDlg.ShowAsync();
-            ////ISocialManager manager = SocialManager.Instance;
-            ////await manager.AddLocalUser(user, SocialManagerExtraDetailLevel.None);
-
-
-
-
-
         }
 
     }
