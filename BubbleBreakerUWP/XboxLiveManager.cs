@@ -8,6 +8,7 @@ using Microsoft.Xbox.Services.Social;
 using Microsoft.Xbox.Services.Social.Manager;
 using System.Threading;
 using Windows.UI.Xaml.Media.Imaging;
+using Microsoft.Xbox.Services.Stats.Manager;
 
 namespace BubbleBreakerUWP
 {
@@ -17,8 +18,33 @@ namespace BubbleBreakerUWP
         public static XboxLiveContext Context { get; private set; } = null;
         public static XboxSocialUser Profile { get; private set; } = null;
         public static BitmapImage GamerPic { get; private set; } = null;
+
         public static XboxSocialUserGroup Friends { get; private set; } = null;
         public static XboxSocialUserGroup Favorites { get; private set; } = null;
+
+        //public static long Highscore
+        //{
+        //    get { return isInitialized ? StatsManager.Instance.GetStat(User, @"Score").AsInteger() : 0; }
+        //    set { if (isInitialized) StatsManager.Instance.SetStatAsInteger(User, @"Score", value); }
+        //}
+
+        //public static void SetHighscore(long h)
+        //{
+        //    if (isInitialized)
+        //    {
+        //        StatsManager.Instance.SetStatAsInteger(User, "Score", h);
+        //    }
+        //}
+
+        //public static long GetHighscore()
+        //{
+        //    if (isInitialized)
+        //    {
+        //        var s = StatsManager.Instance.GetStat(User, "Score");
+        //        return s.AsInteger();
+        //    }
+        //    else return -1;
+        //}
 
         //private static PeopleHubService peopleHubService;
         private static Boolean isInitialized = false;
@@ -27,7 +53,7 @@ namespace BubbleBreakerUWP
         /// Initializing the Manager object
         /// </summary>
         /// <returns>if Xbox Live SignIn fails returns false otherwise true</returns>
-        public static async Task<Boolean> InititializeAsync()
+        public static async Task<Boolean> LoginAsync()
         {
             if (isInitialized) return isInitialized;
             User = new XboxLiveUser();
@@ -40,10 +66,16 @@ namespace BubbleBreakerUWP
             {
                 Context = new XboxLiveContext(User);
 
+                // Get User Xbox Live Profile
                 await SocialManager.Instance.AddLocalUser(User, SocialManagerExtraDetailLevel.None);
                 ulong userId = ulong.Parse(User.XboxUserId);
                 var group = SocialManager.Instance.CreateSocialUserGroupFromList(User, new List<ulong> { userId });
                 Profile = group.GetUser(userId);
+
+                // Initialiaze Stats Manager
+                StatsManager.Instance.AddLocalUser(User);
+                //StatsManager.Instance.DoWork();
+                //var x = StatsManager.Instance.GetStatNames(User);
 
                 // Peoplehub approach. MS recommends to use SocialManager instead
                 //peopleHubService = new PeopleHubService(Context.Settings, Context.AppConfig);
@@ -62,6 +94,8 @@ namespace BubbleBreakerUWP
             Favorites = SocialManager.Instance.CreateSocialUserGroupFromFilters(User, PresenceFilter.All, RelationshipFilter.Favorite, Context.AppConfig.TitleId);
             return true;
         }
+
+
 
     }
 }

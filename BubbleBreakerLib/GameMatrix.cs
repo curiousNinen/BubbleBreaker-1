@@ -9,7 +9,7 @@ namespace BubbleBreakerLib
     public class GameMatrix
     {
         // Sichtbare Attribute und Zugriffe auf Attribute der Klasse
-        public int Score { get; set; } = 0;             // aktueller Gesamt Score
+        public long Score { get; set; } = 0;             // aktueller Gesamt Score
         public int Zeilen { get; private set; }         // Anzahl der Zeilen der Matrix
         public int Spalten { get; private set; }        // Anzahl der Spalten der Matrix
         public Zelle ZelleDerAdresse(int x, int y) 
