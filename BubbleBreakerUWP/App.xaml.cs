@@ -43,13 +43,13 @@ namespace BubbleBreakerUWP
         {
 
 #if DEBUG
-            //if (System.Diagnostics.Debugger.IsAttached)
-            //{
-            //    this.DebugSettings.EnableFrameRateCounter = true;
-            //}
+            if (System.Diagnostics.Debugger.IsAttached)
+            {
+                this.DebugSettings.EnableFrameRateCounter = true;
+            }
 #endif
-
-            if (!await XboxLiveManager.InititializeAsync())
+            await XboxLiveManager.Instance.SignInAsync();
+            if (!XboxLiveManager.Instance.SignedIn)
             {
                 var msg = new MessageDialog("Ohne erfolgreiche Anmeldung kann das Spiel nicht gespielt werden");
                 await msg.ShowAsync();
@@ -64,11 +64,6 @@ namespace BubbleBreakerUWP
             {
                 // Create a Frame to act as the navigation context and navigate to the first page
                 rootFrame = new Frame();
-
-
-
-                rootFrame.MaxHeight = EffectivePixels.Height;
-                rootFrame.MaxWidth = 600;
 
                 rootFrame.NavigationFailed += OnNavigationFailed;
 

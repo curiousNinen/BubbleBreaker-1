@@ -111,9 +111,6 @@
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="XboxLiveApiStub\XboxLiveAppConfiguration.cs" />
-    <Compile Include="XboxLiveApiStub\XboxLiveContext.cs" />
-    <Compile Include="XboxLiveApiStub\XboxLiveUser.cs" />
     <Compile Include="XboxLiveManager.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -143,12 +140,15 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\xbox-live-api-csharp\Source\Microsoft.Xbox.Services.UWP.CSharp\Microsoft.Xbox.Services.UWP.CSharp.csproj">
+      <Project>{cfb2ca8f-6611-4dca-981c-4b7afcca19a8}</Project>
+      <Name>Microsoft.Xbox.Services.UWP.CSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BubbleBreakerLib\BubbleBreakerLib.csproj">
       <Project>{2d83262f-eade-486e-a2a8-e42cbd65787b}</Project>
       <Name>BubbleBreakerLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <Import Project="..\..\xbox-live-api-csharp\Source\api\Microsoft.Xbox.Services.Shared.projitems" Label="Shared" />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

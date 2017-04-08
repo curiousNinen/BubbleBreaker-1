@@ -35,26 +35,22 @@ namespace BubbleBreakerUWP
     {
         private GameMatrix SpielLogik;
         private GfxInterface SpielGfx;
-        private int Highscore;
+        private long Highscore;
 
         public MainPage()
         {
             this.InitializeComponent();
-            //this.MaxHeight = 800;
-            //this.MaxWidth = 600;
-            //this.MinHeight = 800;
-            //this.MaxHeight = 600;
-
         }
 
-        protected override /*async*/ void OnNavigatedTo(NavigationEventArgs e)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            //if (!await XboxLiveManager.InititializeAsync())
-            //{
-
-            //}
             Highscore = 0;
-            GamerPic.Source = XboxLiveManager.GamerPic;
+            Highscore = XboxLiveManager.Instance.Highscore;
+            GamerPic.Source = XboxLiveManager.Instance.Gamerpic;
         }
 
         /// <summary>
@@ -63,7 +59,9 @@ namespace BubbleBreakerUWP
         private void PunktzahlAnzeigen()
         {
             Highscore = Math.Max(Highscore, SpielLogik.Score);
+            XboxLiveManager.Instance.Highscore = Highscore;
             Punktzahl.Text = $"Punktzahl: {SpielLogik.Score}   Highscore: {Highscore}";
+            XboxLiveManager.Instance.Flush();
         }
 
         /// <summary>
